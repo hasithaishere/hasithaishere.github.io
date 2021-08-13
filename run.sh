@@ -1,3 +1,3 @@
 #!/bin/bash
 echo "Run Development server"
-python -m SimpleHTTPServer
+python3 -m http.server 9000
