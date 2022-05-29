@@ -1430,6 +1430,10 @@ footer p{
     width: 40px;
 }
 
+.cv-docx-btn {
+	width: 40px;
+}
+
 /*=================== Responsive Design ==================*/
 @media only screen and (max-width: 479px){
 .portfolio_items li{
