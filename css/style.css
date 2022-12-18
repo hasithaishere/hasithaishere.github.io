@@ -1685,3 +1685,8 @@ and (orientation : landscape) {
 }
 
 }
+
+.whatsapp-connect {
+    color: green;
+    font-weight: 500;
+}
