@@ -1,0 +1,1434 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buildline | The Future of CI/CD</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Space Grotesk', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        void: '#030303',
+                        surface: '#0B0B0D',
+                        panel: '#0C0C0E',
+                        metal: '#1a1a1d',
+                        highlight: '#8b5cf6',
+                        accent: '#3b82f6',
+                        cyan: '#06b6d4',
+                        success: '#10b981',
+                        danger: '#ef4444',
+                        neon: {
+                            blue: '#3b82f6',
+                            purple: '#8b5cf6',
+                            cyan: '#06b6d4',
+                            pink: '#ec4899',
+                            green: '#10b981',
+                            orange: '#f97316',
+                            red: '#ef4444'
+                        }
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'float-delayed': 'float 6s ease-in-out 2s infinite',
+                        'pulse-glow': 'pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'tread-move': 'treadMove 0.5s linear infinite',
+                        'gear-spin': 'spin 4s linear infinite',
+                        'scan-beam': 'scanBeam 1.5s ease-in-out infinite',
+                        'progress-flow': 'progressFlow 2s linear infinite',
+                        'slide-up': 'slideUp 0.5s ease-out',
+                        'fade-in': 'fadeIn 0.8s ease-out',
+                        'scale-in': 'scaleIn 0.5s ease-out',
+                        'bounce-subtle': 'bounceSubtle 2s ease-in-out infinite',
+                        'shimmer': 'shimmer 2s linear infinite',
+                        'data-stream': 'dataStream 1s linear infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-15px)' },
+                        },
+                        'pulse-glow': {
+                            '0%, 100%': { opacity: 1, boxShadow: '0 0 20px rgba(139, 92, 246, 0.5)' },
+                            '50%': { opacity: .5, boxShadow: '0 0 5px rgba(139, 92, 246, 0.1)' },
+                        },
+                        treadMove: {
+                            'from': { backgroundPosition: '0 0' },
+                            'to': { backgroundPosition: '28px 0' },
+                        },
+                        scanBeam: {
+                            '0%, 100%': { opacity: 0.3, height: '80%' },
+                            '50%': { opacity: 0.8, height: '100%' },
+                        },
+                        progressFlow: {
+                            '0%': { backgroundPosition: '0 0' },
+                            '100%': { backgroundPosition: '20px 0' }
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(30px)', opacity: 0 },
+                            '100%': { transform: 'translateY(0)', opacity: 1 },
+                        },
+                        fadeIn: {
+                            '0%': { opacity: 0 },
+                            '100%': { opacity: 1 },
+                        },
+                        scaleIn: {
+                            '0%': { transform: 'scale(0.9)', opacity: 0 },
+                            '100%': { transform: 'scale(1)', opacity: 1 },
+                        },
+                        bounceSubtle: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-5px)' },
+                        },
+                        shimmer: {
+                            '0%': { backgroundPosition: '-1000px 0' },
+                            '100%': { backgroundPosition: '1000px 0' },
+                        },
+                        dataStream: {
+                            '0%': { strokeDashoffset: '20' },
+                            '100%': { strokeDashoffset: '0' },
+                        },
+                        fadeCycle3: { 
+                            '0%, 60%': { opacity: 0 }, 
+                            '65%, 95%': { opacity: 1, zIndex: 10 }, 
+                            '100%': { opacity: 0 } 
+                        },
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #030303;
+            color: #e5e7eb;
+            overflow-x: hidden;
+        }
+
+        .glass-panel {
+            background: rgba(20, 20, 25, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        .glass-panel:hover {
+            border-color: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+            transition: all 0.3s ease;
+        }
+
+        .grid-bg {
+            background-size: 50px 50px;
+            background-image: 
+                linear-gradient(to right, rgba(139, 92, 246, 0.05) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(139, 92, 246, 0.05) 1px, transparent 1px);
+            mask-image: radial-gradient(circle at center, black 40%, transparent 80%);
+        }
+
+        /* Glow orbs */
+        .glow-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.4;
+            z-index: 0;
+            animation: pulse-glow 8s infinite alternate;
+        }
+
+        /* Interactive card hover */
+        .feature-card {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(139, 92, 246, 0.1), transparent);
+            transform: rotate(45deg);
+            transition: all 0.6s ease;
+        }
+
+        .feature-card:hover::before {
+            left: 100%;
+        }
+
+        /* Hero Cables */
+        .cable-path { 
+            fill: none; 
+            stroke: rgba(255, 255, 255, 0.05); 
+            stroke-width: 2; 
+        }
+        
+        .cable-blue { 
+            fill: none; 
+            stroke: #3b82f6; 
+            stroke-width: 2; 
+            stroke-dasharray: 5 15; 
+            stroke-linecap: round; 
+            opacity: 0.4; 
+            animation: dataStream 3s linear infinite reverse; 
+        }
+        
+        .cable-red { 
+            fill: none; 
+            stroke: #ef4444; 
+            stroke-width: 4; 
+            stroke-dasharray: 20 20; 
+            stroke-linecap: round; 
+            filter: drop-shadow(0 0 8px #ef4444); 
+            opacity: 1; 
+            animation: dataStream 0.5s linear infinite; 
+        }
+
+        /* 3D Effects */
+        .perspective-container { 
+            perspective: 1000px; 
+        }
+        
+        .card-3d { 
+            transform-style: preserve-3d; 
+            transition: transform 0.1s ease-out; 
+        }
+
+        /* Conveyor Belt */
+        .conveyor-belt {
+            background: repeating-linear-gradient(
+                -45deg,
+                #1a1a1d,
+                #1a1a1d 10px,
+                #111 10px,
+                #111 20px
+            );
+            background-size: 28px 28px;
+            animation: treadMove 1s linear infinite;
+            border-top: 2px solid #333;
+            border-bottom: 2px solid #333;
+            box-shadow: inset 0 5px 15px rgba(0,0,0,0.9);
+        }
+        
+        .gear { animation: spin 4s linear infinite; }
+
+        .pipeline-item {
+            position: absolute;
+            bottom: 45px;
+            left: -50px;
+            width: 50px;
+            height: 50px;
+            z-index: 20;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        @keyframes journey {
+            0% { left: -50px; opacity: 0; transform: scale(0.8); }
+            5% { opacity: 1; }
+            
+            /* Stage 1: SCAN (8% position) */
+            15% { left: 8%; transform: scale(1); filter: brightness(1); }
+            20% { left: 8%; filter: brightness(2) drop-shadow(0 0 10px #ef4444); }
+            
+            /* Stage 2: BUILD (50% position) */
+            35% { left: 50%; transform: scale(1.1); filter: brightness(1); }
+            45% { left: 50%; filter: brightness(2) drop-shadow(0 0 10px #8b5cf6); }
+            
+            /* Stage 3: PACKAGE (72% position) */
+            60% { left: 72%; transform: scale(1); filter: brightness(1); }
+            65% { left: 72%; filter: brightness(2) drop-shadow(0 0 10px #06b6d4); }
+            
+            /* Stage 4: RELEASE (92% position) */
+            80% { left: 92%; opacity: 1; transform: scale(1); filter: brightness(1); }
+            85% { left: 92%; opacity: 0; transform: scale(0.5); filter: brightness(2) drop-shadow(0 0 10px #10b981); }
+            
+            100% { left: 100%; opacity: 0; }
+        }
+        
+        .run-journey { animation: journey 8s linear forwards; }
+
+        .pipeline-box {
+            position: absolute;
+            bottom: 45px;
+            left: 80%;
+            width: 45px;
+            height: 45px;
+            background: #8b5cf6;
+            border: 2px solid #fff;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.4);
+            opacity: 0;
+            z-index: 25;
+        }
+        
+        @keyframes boxJourney {
+            0% { opacity: 0; transform: scale(0.8); }
+            
+            /* Appear at release stage */
+            80% { opacity: 0; left: 92%; bottom: 45px; transform: scale(0.8); }
+            82% { opacity: 1; transform: scale(1.2); }
+            85% { transform: scale(1); left: 92%; bottom: 45px; }
+            
+            /* Deploy animation */
+            90% { left: 95%; bottom: 45px; opacity: 1; transform: rotate(0deg); }
+            95% { left: 98%; bottom: 100px; opacity: 0.8; transform: rotate(10deg) scale(0.8); }
+            100% { left: 100%; bottom: 200px; opacity: 0; transform: rotate(20deg) scale(0.5); }
+        }
+        
+        .run-box-journey { animation: boxJourney 8s linear forwards; }
+
+        .scanner-beam {
+            background: linear-gradient(to bottom, rgba(239, 68, 68, 0), rgba(239, 68, 68, 0.8));
+            animation: scanBeam 0.5s alternate infinite;
+        }
+
+        .step-node {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            position: relative;
+            z-index: 10;
+            transition: all 0.3s ease;
+        }
+        
+        .step-node.active {
+            border-color: #06b6d4;
+            box-shadow: 0 0 15px rgba(6, 182, 212, 0.3);
+            background: rgba(6, 182, 212, 0.1);
+        }
+        
+        .step-line {
+            flex: 1;
+            height: 2px;
+            background: #333;
+            margin: 0 10px;
+            position: relative;
+        }
+        
+        .step-line.active::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, #06b6d4, transparent);
+            animation: progressFlow 1s linear infinite;
+        }
+
+        /* Stats Counter */
+        .stat-counter {
+            font-variant-numeric: tabular-nums;
+        }
+
+        /* Shimmer effect for CTA */
+        .shimmer-button {
+            background: linear-gradient(90deg, #8b5cf6 0%, #3b82f6 50%, #8b5cf6 100%);
+            background-size: 200% 100%;
+            animation: shimmer 3s linear infinite;
+        }
+
+        /* Scroll reveal animation */
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease-out;
+        }
+
+        .scroll-reveal.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Tooltip */
+        .tooltip {
+            position: relative;
+        }
+
+        .tooltip::before {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%) translateY(-10px);
+            padding: 8px 12px;
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            font-size: 12px;
+            border-radius: 6px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+
+        .tooltip:hover::before {
+            opacity: 1;
+            transform: translateX(-50%) translateY(-5px);
+        }
+
+        /* Code typing effect */
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        .cursor-blink {
+            animation: blink 1s step-end infinite;
+        }
+
+        /* Mobile Phone Animation Phases */
+        .mobile-phase-1 {
+            opacity: 1;
+            z-index: 10;
+            animation: fadePhase1 12s ease-in-out infinite;
+        }
+        
+        .mobile-phase-2 {
+            opacity: 0;
+            z-index: 0;
+            animation: fadePhase2 12s ease-in-out infinite;
+        }
+        
+        .mobile-phase-3 {
+            opacity: 0;
+            z-index: 0;
+            animation: fadePhase3 12s ease-in-out infinite;
+        }
+
+        @keyframes fadePhase1 {
+            0% { opacity: 1; z-index: 10; }
+            25% { opacity: 1; z-index: 10; }
+            30% { opacity: 0; z-index: 0; }
+            100% { opacity: 0; z-index: 0; }
+        }
+
+        @keyframes fadePhase2 {
+            0% { opacity: 0; z-index: 0; }
+            30% { opacity: 0; z-index: 0; }
+            35% { opacity: 1; z-index: 10; }
+            60% { opacity: 1; z-index: 10; }
+            65% { opacity: 0; z-index: 0; }
+            100% { opacity: 0; z-index: 0; }
+        }
+
+        @keyframes fadePhase3 {
+            0% { opacity: 0; z-index: 0; }
+            65% { opacity: 0; z-index: 0; }
+            70% { opacity: 1; z-index: 10; }
+            95% { opacity: 1; z-index: 10; }
+            100% { opacity: 0; z-index: 0; }
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-highlight selection:text-white">
+
+    <!-- Particle Network Canvas -->
+    <canvas id="network-canvas" class="fixed inset-0 z-0 pointer-events-none opacity-40"></canvas>
+
+    <!-- Background Effects -->
+    <div class="fixed inset-0 z-0 pointer-events-none">
+        <div class="glow-orb bg-highlight w-96 h-96 top-0 left-[-100px]"></div>
+        <div class="glow-orb bg-cyan w-64 h-64 bottom-0 right-[-50px]"></div>
+        <div class="absolute inset-0 grid-bg z-0"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 border-b border-white/5 bg-void/80 backdrop-blur-md transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3 cursor-pointer group">
+                <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-highlight to-accent flex items-center justify-center text-white font-bold font-mono shadow-[0_0_15px_rgba(139,92,246,0.5)] group-hover:scale-110 transition-transform">
+                    B
+                </div>
+                <span class="font-bold text-lg tracking-tight text-white group-hover:text-highlight transition-colors">Buildline</span>
+            </div>
+            <div class="hidden md:flex items-center gap-8 text-sm font-medium text-gray-400">
+                <a href="#why" class="hover:text-white transition-colors relative group">
+                    Philosophy
+                    <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-highlight group-hover:w-full transition-all duration-300"></span>
+                </a>
+                <a href="#features" class="hover:text-white transition-colors relative group">
+                    AI Features
+                    <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-highlight group-hover:w-full transition-all duration-300"></span>
+                </a>
+                <a href="#mobile" class="hover:text-white transition-colors relative group">
+                    Mobile
+                    <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-highlight group-hover:w-full transition-all duration-300"></span>
+                </a>
+                <a href="#pipeline" class="hover:text-white transition-colors relative group">
+                    Demo
+                    <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-highlight group-hover:w-full transition-all duration-300"></span>
+                </a>
+                <a href="#faq" class="hover:text-white transition-colors relative group">
+                    FAQ
+                    <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-highlight group-hover:w-full transition-all duration-300"></span>
+                </a>
+            </div>
+            <a href="#wishlist" class="px-5 py-2 rounded-full bg-white text-void font-semibold text-sm hover:bg-gray-200 transition-all transform hover:scale-105 shadow-lg">
+                Join Wishlist
+            </a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative pt-32 pb-20 md:pt-48 md:pb-32 px-6 overflow-hidden z-10">
+        <div class="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-center">
+            
+            <div class="text-left relative z-20 animate-slide-up">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-cyan/30 bg-cyan/10 text-xs font-mono text-cyan mb-6 hover:scale-105 transition-transform cursor-pointer">
+                    <span class="relative flex h-2 w-2">
+                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan opacity-75"></span>
+                      <span class="relative inline-flex rounded-full h-2 w-2 bg-cyan"></span>
+                    </span>
+                    Validation Phase: v1.0
+                </div>
+                
+                <h1 class="text-5xl md:text-7xl font-bold tracking-tight text-white mb-6 leading-[1.1]">
+                    CI/CD that runs <br/>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-highlight to-accent">wherever you do.</span>
+                </h1>
+                
+                <p class="text-lg text-gray-400 mb-8 max-w-lg leading-relaxed">
+                    Cloud. On-prem. Private data center. Home lab. 
+                    <strong class="text-white">If you can run an agent there, Buildline supports it.</strong>
+                    Total control of your infrastructure with the intelligence of a managed cloud.
+                </p>
+
+                <div class="flex flex-wrap gap-4 mb-8">
+                    <a href="#wishlist" class="px-8 py-4 shimmer-button text-white font-bold rounded-xl hover:scale-105 transition-transform shadow-[0_0_20px_rgba(139,92,246,0.4)]">
+                        Join the Wishlist
+                    </a>
+                    <div class="px-8 py-4 glass-panel text-gray-400 font-mono text-sm rounded-xl border border-white/10 flex items-center gap-2 hover:border-success/50 transition-colors">
+                        <span class="text-success animate-pulse">●</span> No Vendor Lock-in
+                    </div>
+                </div>
+
+                <!-- Stats Counter -->
+                <div class="grid grid-cols-3 gap-6 pt-8 border-t border-white/10">
+                    <div class="text-center">
+                        <div class="text-3xl font-bold text-highlight stat-counter" data-target="247">0</div>
+                        <div class="text-xs text-gray-500 mt-1">Teams Interested</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl font-bold text-cyan stat-counter" data-target="1400">0</div>
+                        <div class="text-xs text-gray-500 mt-1">Agents Ready</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl font-bold text-success stat-counter" data-target="100">0</div>
+                        <div class="text-xs text-gray-500 mt-1">Uptime %</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="relative w-full h-[400px] animate-float perspective-container hidden lg:block">
+                <!-- SVG Cables -->
+                <svg class="absolute inset-0 w-full h-full pointer-events-none" style="z-index: 0;">
+                    <path d="M50,400 Q150,400 200,250 T350,100" class="cable-path" />
+                    <path d="M50,100 Q200,100 250,250 T450,400" class="cable-path" />
+                    <path d="M50,400 Q150,400 200,250 T350,100" class="cable-blue" />
+                    <path d="M50,100 Q200,100 250,250 T450,400" class="cable-red" />
+                </svg>
+
+                <!-- Floating Agent Cards -->
+                <div class="absolute top-[20%] right-[10%] w-64 glass-panel p-4 rounded-xl animate-float card-3d" data-depth="20">
+                    <div class="flex items-center gap-3 mb-3 border-b border-white/5 pb-2">
+                        <div class="w-8 h-8 bg-black rounded flex items-center justify-center">🍎</div>
+                        <div class="text-xs font-mono">
+                            <div class="text-white">mac-studio-01</div>
+                            <div class="text-success">● Agent Active</div>
+                        </div>
+                    </div>
+                    <div class="h-1 w-full bg-gray-800 rounded overflow-hidden">
+                        <div class="h-full bg-success animate-pulse w-3/4"></div>
+                    </div>
+                    <div class="mt-2 text-[10px] text-gray-500 font-mono">Signing IPA...</div>
+                </div>
+
+                <div class="absolute bottom-[20%] left-[10%] w-64 glass-panel p-4 rounded-xl animate-float card-3d" style="animation-delay: 1s;" data-depth="40">
+                    <div class="flex items-center gap-3 mb-3 border-b border-white/5 pb-2">
+                        <div class="w-8 h-8 bg-black rounded flex items-center justify-center">🐧</div>
+                        <div class="text-xs font-mono">
+                            <div class="text-white">home-lab-gpu</div>
+                            <div class="text-danger animate-pulse">● High Load</div>
+                        </div>
+                    </div>
+                    <div class="space-y-2 font-mono text-[10px]">
+                        <div class="text-gray-400">> nvidia-smi</div>
+                        <div class="text-gray-500">Usage: 99% | Temp: 82C</div>
+                        <div class="text-cyan">Training Model v4...</div>
+                    </div>
+                </div>
+
+                <!-- Center Control Plane -->
+                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-void border border-cyan/50 rounded-full flex items-center justify-center shadow-[0_0_50px_rgba(6,182,212,0.2)] z-10">
+                    <div class="w-24 h-24 bg-cyan/10 rounded-full flex items-center justify-center animate-pulse">
+                        <svg class="w-10 h-10 text-cyan" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Buildline Section -->
+    <section id="why" class="py-24 bg-surface border-y border-white/5 scroll-reveal">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold mb-4 text-white">Why Buildline is Different</h2>
+                <p class="text-gray-400">Legacy clouds want to rent you slow computers. We let you use your own fast ones.</p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="border border-white/10 rounded-2xl overflow-hidden bg-void hover:border-highlight/30 transition-all duration-300">
+                    <div class="grid grid-cols-3 bg-white/5 p-4 text-xs font-mono font-bold text-gray-400 uppercase">
+                        <div>Feature</div>
+                        <div class="text-center">Legacy CI</div>
+                        <div class="text-center text-highlight">Buildline</div>
+                    </div>
+                    <div class="divide-y divide-white/5 text-sm">
+                        <div class="grid grid-cols-3 p-4 hover:bg-white/5 transition-colors">
+                            <div class="text-gray-400">Compute Cost</div>
+                            <div class="text-center text-danger font-semibold">High Markup</div>
+                            <div class="text-center text-white font-semibold">Zero (BYO)</div>
+                        </div>
+                        <div class="grid grid-cols-3 p-4 hover:bg-white/5 transition-colors">
+                            <div class="text-gray-400">GPU Access</div>
+                            <div class="text-center text-danger font-semibold">Limited / $$$</div>
+                            <div class="text-center text-white font-semibold">Full Native</div>
+                        </div>
+                        <div class="grid grid-cols-3 p-4 hover:bg-white/5 transition-colors">
+                            <div class="text-gray-400">Data Privacy</div>
+                            <div class="text-center text-danger font-semibold">Code in Cloud</div>
+                            <div class="text-center text-white font-semibold">Stays in VPC</div>
+                        </div>
+                        <div class="grid grid-cols-3 p-4 hover:bg-white/5 transition-colors">
+                            <div class="text-gray-400">Mobile Speed</div>
+                            <div class="text-center text-danger font-semibold">Slow VMs</div>
+                            <div class="text-center text-white font-semibold">Real Hardware</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex flex-col justify-center">
+                    <h3 class="text-2xl font-bold text-white mb-4">The Control Plane Philosophy</h3>
+                    <p class="text-gray-400 mb-6 leading-relaxed">
+                        Buildline separates the <strong class="text-highlight">"Brain"</strong> (Orchestration) from the <strong class="text-cyan">"Muscle"</strong> (Execution). 
+                        We host the dashboard, the logs, and the scheduling logic. You host the agents.
+                    </p>
+                    <div class="space-y-4">
+                        <div class="flex gap-4 items-start p-4 rounded-lg hover:bg-white/5 transition-colors cursor-pointer">
+                            <div class="w-8 h-8 rounded bg-highlight/20 flex items-center justify-center text-highlight shrink-0 font-bold">1</div>
+                            <div>
+                                <h4 class="text-white font-bold">Secure by Design</h4>
+                                <p class="text-gray-500 text-sm">Agents connect outbound via WebSocket. No inbound ports required.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4 items-start p-4 rounded-lg hover:bg-white/5 transition-colors cursor-pointer">
+                            <div class="w-8 h-8 rounded bg-highlight/20 flex items-center justify-center text-highlight shrink-0 font-bold">2</div>
+                            <div>
+                                <h4 class="text-white font-bold">Hybrid Harmony</h4>
+                                <p class="text-gray-500 text-sm">Mix a Mac Studio under your desk with an AWS Auto-scaling group in the same pipeline.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Features Section -->
+    <section id="features" class="py-24 px-6 relative z-10 bg-surface/50 scroll-reveal">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center max-w-2xl mx-auto mb-16">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-cyan/30 bg-cyan/10 text-xs font-mono text-cyan mb-4 hover:scale-105 transition-transform cursor-pointer">
+                    <svg class="w-4 h-4 animate-pulse" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2a2 2 0 012 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 017 7h1a1 1 0 011 1v3a1 1 0 01-1 1h-1v1a2 2 0 01-2 2H5a2 2 0 01-2-2v-1H2a1 1 0 01-1-1v-3a1 1 0 011-1h1a7 7 0 017-7V5.73A2 2 0 0112 2z"/></svg>
+                    INTELLIGENT PIPELINES
+                </div>
+                <h2 class="text-3xl font-bold mb-4">More than just Automation</h2>
+                <p class="text-gray-400">Buildline uses local AI models to optimize your workflow in real-time.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="glass-panel feature-card p-8 rounded-2xl hover:border-cyan/50 transition-all duration-300 group cursor-pointer">
+                    <div class="w-12 h-12 bg-cyan/10 rounded-lg flex items-center justify-center mb-6 text-cyan group-hover:scale-110 group-hover:rotate-6 transition-all">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3 group-hover:text-cyan transition-colors">Self-Healing Retries</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-4">
+                        Buildline detects flaky tests using historical data. If a test fails, it re-runs only the failure, not the whole suite.
+                    </p>
+                    <div class="text-xs font-mono text-success bg-black/50 p-3 rounded border border-white/5">
+                        > Detected Flakiness (98% pass)<br>
+                        > Retrying test_login... <span class="text-success">PASS</span>
+                    </div>
+                </div>
+                
+                <div class="glass-panel feature-card p-8 rounded-2xl hover:border-highlight/50 transition-all duration-300 group cursor-pointer">
+                    <div class="w-12 h-12 bg-highlight/10 rounded-lg flex items-center justify-center mb-6 text-highlight group-hover:scale-110 group-hover:rotate-6 transition-all">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3 group-hover:text-highlight transition-colors">Predictive Scaling</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-4">
+                        Our AI predicts queue spikes based on your commit history (e.g., "Friday Deployments") and pre-warms agents.
+                    </p>
+                    <div class="text-xs font-mono text-highlight bg-black/50 p-3 rounded border border-white/5">
+                        > Forecast: High Load (+200%)<br>
+                        > Pre-provisioning 5 GPU nodes...
+                    </div>
+                </div>
+                
+                <div class="glass-panel feature-card p-8 rounded-2xl hover:border-neon-orange/50 transition-all duration-300 group cursor-pointer">
+                    <div class="w-12 h-12 bg-neon-orange/10 rounded-lg flex items-center justify-center mb-6 text-neon-orange group-hover:scale-110 group-hover:rotate-6 transition-all">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"/></svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3 group-hover:text-neon-orange transition-colors">Intelligent Caching</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-4">
+                        We analyze your dependency graphs to only download changed packages, reducing build times by up to 80%.
+                    </p>
+                    <div class="text-xs font-mono text-neon-orange bg-black/50 p-3 rounded border border-white/5">
+                        > Analysis: package.json unchanged<br>
+                        > Restoring 4GB cache (0.2s)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mobile CI Section -->
+    <section id="mobile" class="py-32 relative scroll-reveal">
+        <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
+            <div class="order-2 md:order-1 relative flex justify-center perspective-container">
+                <div class="relative w-[320px] h-[640px] bg-black border-8 border-gray-800 rounded-[3.5rem] shadow-2xl overflow-hidden z-10 card-3d" data-depth="30">
+                    <!-- Phone Notch -->
+                    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-7 bg-gray-800 rounded-b-xl z-30"></div>
+                    
+                    <!-- Phone Screen Content -->
+                    <div class="w-full h-full bg-[#0a1628] flex flex-col relative">
+                        <!-- Phase 1: Swift Code Editor -->
+                        <div class="absolute inset-0 p-6 pt-12 flex flex-col justify-center mobile-phase-1">
+                            <div class="font-mono text-xs leading-relaxed">
+                                <div class="mb-4">
+                                    <span class="text-[#ff7ab2]">import</span> <span class="text-white">SwiftUI</span>
+                                </div>
+                                <div class="mb-2">
+                                    <span class="text-[#ff7ab2]">struct</span> <span class="text-white">App</span><span class="text-gray-400">:</span> <span class="text-[#4fc3f7]">View</span> <span class="text-white">{</span>
+                                </div>
+                                <div class="ml-4 mb-2">
+                                    <span class="text-[#4fc3f7]">var</span> <span class="text-white">body</span><span class="text-gray-400">:</span> <span class="text-[#4fc3f7]">some</span> <span class="text-[#4fc3f7]">View</span> <span class="text-white">{</span>
+                                </div>
+                                <div class="ml-8 mb-2">
+                                    <span class="text-white">Text(</span><span class="text-[#fc6a5d]">"Building..."</span><span class="text-white">)</span>
+                                </div>
+                                <div class="ml-4 mb-2">
+                                    <span class="text-white">}</span>
+                                </div>
+                                <div>
+                                    <span class="text-white">}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Phase 2: Compiling with Spinner -->
+                        <div class="absolute inset-0 flex flex-col items-center justify-center mobile-phase-2">
+                            <!-- Spinner Circle -->
+                            <div class="relative mb-8">
+                                <svg class="w-24 h-24 animate-spin" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="50" cy="50" r="45" fill="none" stroke="#1a2f4a" stroke-width="8"/>
+                                    <circle cx="50" cy="50" r="45" fill="none" stroke="#06b6d4" stroke-width="8" stroke-linecap="round"
+                                            stroke-dasharray="70 200" transform="rotate(-90 50 50)"/>
+                                </svg>
+                            </div>
+                            
+                            <div class="text-center">
+                                <div class="text-cyan font-mono text-base mb-2 font-semibold">Compiling Assets...</div>
+                                <div class="text-gray-500 font-mono text-xs">Agent: mac-mini-m2</div>
+                            </div>
+                        </div>
+
+                        <!-- Phase 3: Build Success -->
+                        <div class="absolute inset-0 flex flex-col items-center justify-center mobile-phase-3">
+                            <!-- Success Icon with Gradient -->
+                            <div class="relative mb-8">
+                                <div class="w-28 h-28 rounded-[2rem] bg-gradient-to-br from-[#b794f6] to-[#f472b6] flex items-center justify-center shadow-[0_0_40px_rgba(183,148,246,0.5)]">
+                                    <svg class="w-14 h-14 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            
+                            <div class="text-center">
+                                <h3 class="text-2xl font-bold text-white mb-2">Build Success</h3>
+                                <p class="text-gray-400 text-sm">Uploaded to App Store Connect</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Glow Effect -->
+                <div class="absolute inset-0 bg-gradient-to-br from-highlight/30 via-transparent to-cyan/20 blur-[100px] -z-10"></div>
+            </div>
+
+            <div class="order-1 md:order-2">
+                <div class="text-highlight font-mono mb-4 text-sm tracking-widest uppercase">Mobile Native</div>
+                <h2 class="text-4xl md:text-5xl font-bold mb-6">Mobile CI without <br/><span class="text-white italic">the hacks.</span></h2>
+                <p class="text-gray-400 text-lg mb-8">
+                    We treat mobile as first-class. Native iOS and Android pipelines running on real Mac agents and Android emulators.
+                </p>
+                <ul class="space-y-4">
+                    <li class="flex items-center gap-3 p-3 rounded-lg hover:bg-white/5 transition-colors">
+                        <div class="w-6 h-6 rounded-full bg-highlight/20 flex items-center justify-center text-highlight">✓</div>
+                        <span class="text-white">Real Mac Agents (BYO)</span>
+                    </li>
+                    <li class="flex items-center gap-3 p-3 rounded-lg hover:bg-white/5 transition-colors">
+                        <div class="w-6 h-6 rounded-full bg-highlight/20 flex items-center justify-center text-highlight">✓</div>
+                        <span class="text-white">Code Signing & Modern Tooling</span>
+                    </li>
+                    <li class="flex items-center gap-3 p-3 rounded-lg hover:bg-white/5 transition-colors">
+                        <div class="w-6 h-6 rounded-full bg-highlight/20 flex items-center justify-center text-highlight">✓</div>
+                        <span class="text-white">Direct App Store Upload</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Live Pipeline Demo Section -->
+    <section id="pipeline" class="py-24 bg-[#050505] relative overflow-hidden border-t border-b border-white/5 scroll-reveal">
+        <div class="max-w-6xl mx-auto px-6 text-center mb-16 relative z-10">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-gray-700 bg-gray-800/50 text-gray-300 text-xs font-mono mb-4">
+                <span class="w-2 h-2 rounded-full bg-success animate-pulse"></span>
+                LIVE SYSTEM DEMO
+            </div>
+            <h2 class="text-3xl font-bold text-white mb-2">The Universal Assembly Line</h2>
+            <p class="text-gray-500 mt-2">Watch code transform into production-ready artifacts in real-time</p>
+        </div>
+
+        <div class="relative w-full max-w-7xl mx-auto h-[550px] bg-metal rounded-xl border border-white/10 overflow-hidden shadow-2xl">
+            <!-- Grid Background -->
+            <div class="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px]"></div>
+
+            <!-- Stage Labels -->
+            <div class="absolute top-8 left-0 right-0 flex justify-around px-8 z-30">
+                <div class="text-center">
+                    <div class="w-12 h-12 mx-auto mb-2 rounded-lg bg-danger/20 border border-danger/50 flex items-center justify-center">
+                        <svg class="w-6 h-6 text-danger" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                    </div>
+                    <div class="text-xs font-mono text-danger font-bold">SCAN</div>
+                    <div class="text-[10px] text-gray-500">Security Check</div>
+                </div>
+                <div class="text-center">
+                    <div class="w-12 h-12 mx-auto mb-2 rounded-lg bg-highlight/20 border border-highlight/50 flex items-center justify-center animate-pulse">
+                        <svg class="w-6 h-6 text-highlight" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
+                    </div>
+                    <div class="text-xs font-mono text-highlight font-bold">BUILD</div>
+                    <div class="text-[10px] text-gray-500">Compile + Test</div>
+                </div>
+                <div class="text-center">
+                    <div class="w-12 h-12 mx-auto mb-2 rounded-lg bg-cyan/20 border border-cyan/50 flex items-center justify-center">
+                        <svg class="w-6 h-6 text-cyan" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+                    </div>
+                    <div class="text-xs font-mono text-cyan font-bold">PACKAGE</div>
+                    <div class="text-[10px] text-gray-500">Containerize</div>
+                </div>
+                <div class="text-center">
+                    <div class="w-12 h-12 mx-auto mb-2 rounded-lg bg-success/20 border border-success/50 flex items-center justify-center">
+                        <svg class="w-6 h-6 text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/></svg>
+                    </div>
+                    <div class="text-xs font-mono text-success font-bold">RELEASE</div>
+                    <div class="text-[10px] text-gray-500">Deploy Live</div>
+                </div>
+            </div>
+
+            <!-- Conveyor Belt System -->
+            <div class="absolute bottom-20 w-full">
+                <div class="w-full h-16 conveyor-belt relative z-10"></div>
+                <!-- Gears -->
+                <div class="absolute -bottom-10 left-[8%] w-24 h-24 border-4 border-gray-600 border-dashed rounded-full gear z-0"></div>
+                <div class="absolute -bottom-10 left-[28%] w-24 h-24 border-4 border-gray-600 border-dashed rounded-full gear z-0" style="animation-delay: 0.5s"></div>
+                <div class="absolute -bottom-10 left-[48%] w-24 h-24 border-4 border-gray-600 border-dashed rounded-full gear z-0" style="animation-delay: 1s"></div>
+                <div class="absolute -bottom-10 left-[68%] w-24 h-24 border-4 border-gray-600 border-dashed rounded-full gear z-0" style="animation-delay: 1.5s"></div>
+                <div class="absolute -bottom-10 left-[88%] w-24 h-24 border-4 border-gray-600 border-dashed rounded-full gear z-0" style="animation-delay: 2s"></div>
+            </div>
+
+            <!-- Stage 1: Scanner -->
+            <div class="absolute bottom-20 left-[8%] w-40 h-72 z-20 flex flex-col items-center">
+                <div class="w-full h-10 bg-gray-800 border border-gray-600 rounded-t flex justify-center items-center relative">
+                    <div class="w-3 h-3 rounded-full bg-danger animate-pulse"></div>
+                </div>
+                <div class="w-3 h-full bg-gray-700 relative">
+                    <!-- Scanning beam -->
+                    <div class="absolute top-10 left-1/2 -translate-x-1/2 w-32 h-full scanner-beam opacity-50 blur-md pointer-events-none"></div>
+                </div>
+                <div class="absolute top-full mt-2 text-xs font-mono text-danger bg-black px-3 py-1 border border-danger/30 rounded whitespace-nowrap">
+                    SCANNING...
+                </div>
+                <!-- Logs -->
+                <div class="absolute -right-24 top-16 w-48 glass-panel p-2 rounded text-[9px] font-mono text-gray-400 leading-tight">
+                    <div class="text-danger">→ npm audit</div>
+                    <div class="text-gray-500">→ 0 vulnerabilities</div>
+                    <div class="text-success">✓ Security: PASS</div>
+                </div>
+            </div>
+
+            <!-- Stage 2: Build Engine (CENTER) -->
+            <div class="absolute bottom-20 left-1/2 -translate-x-1/2 w-56 h-96 z-20 flex flex-col items-center justify-end">
+                <div class="w-full h-80 bg-void/95 border-2 border-highlight/50 rounded-t-xl backdrop-blur-sm relative overflow-hidden flex flex-col shadow-[0_0_40px_rgba(139,92,246,0.2)]">
+                    <!-- Header -->
+                    <div class="bg-highlight/20 border-b border-highlight/30 p-2 flex items-center justify-between">
+                        <div class="text-[10px] font-mono text-highlight font-bold">BUILD ENGINE</div>
+                        <div class="flex gap-1">
+                            <div class="w-2 h-2 rounded-full bg-success animate-pulse"></div>
+                            <div class="w-2 h-2 rounded-full bg-cyan animate-pulse" style="animation-delay: 0.2s"></div>
+                            <div class="w-2 h-2 rounded-full bg-highlight animate-pulse" style="animation-delay: 0.4s"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Build Logs -->
+                    <div class="flex-1 p-3 font-mono text-[9px] leading-relaxed text-left overflow-hidden">
+                        <div class="text-gray-400 mb-1">$ buildline run</div>
+                        <div class="text-cyan">→ Detected: Node.js 20.x</div>
+                        <div class="text-gray-500">→ Installing dependencies...</div>
+                        <div class="text-success">✓ 847 packages installed (2.1s)</div>
+                        <div class="text-highlight mt-2">→ Running build...</div>
+                        <div class="text-gray-500">  - Compiling TypeScript...</div>
+                        <div class="text-gray-500">  - Bundling assets...</div>
+                        <div class="text-success">✓ Build complete (8.3s)</div>
+                        <div class="text-cyan mt-2">→ Running tests...</div>
+                        <div class="text-success">✓ 127 tests passed</div>
+                    </div>
+
+                    <!-- Activity Indicator -->
+                    <div class="absolute bottom-3 left-3 right-3 h-1 bg-gray-800 rounded overflow-hidden">
+                        <div class="h-full bg-gradient-to-r from-highlight via-cyan to-success animate-[progressFlow_1.5s_linear_infinite] w-full"></div>
+                    </div>
+
+                    <!-- Grid overlay -->
+                    <div class="absolute inset-0 bg-[linear-gradient(rgba(139,92,246,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(139,92,246,0.05)_1px,transparent_1px)] bg-[size:10px_10px] opacity-30 pointer-events-none"></div>
+                </div>
+            </div>
+
+            <!-- Stage 3: Packager -->
+            <div class="absolute bottom-20 right-[28%] w-40 h-72 z-20 flex flex-col items-center">
+                <div class="w-full h-10 bg-gray-800 border border-gray-600 rounded-t flex justify-center items-center">
+                    <div class="w-3 h-3 rounded-full bg-cyan animate-pulse"></div>
+                </div>
+                <div class="w-3 h-full bg-gray-700"></div>
+                <div class="absolute top-full mt-2 text-xs font-mono text-cyan bg-black px-3 py-1 border border-cyan/30 rounded whitespace-nowrap">
+                    PACKAGING
+                </div>
+                <!-- Docker Build -->
+                <div class="absolute -left-24 top-16 w-44 glass-panel p-2 rounded text-[9px] font-mono text-gray-400 leading-tight">
+                    <div class="text-cyan">→ docker build</div>
+                    <div class="text-gray-500">Step 1/8: FROM node:20</div>
+                    <div class="text-gray-500">Step 8/8: CMD ["start"]</div>
+                    <div class="text-success">✓ Image built: 247MB</div>
+                </div>
+            </div>
+
+            <!-- Stage 4: Release -->
+            <div class="absolute bottom-20 right-[8%] w-40 h-72 z-20 flex flex-col items-center">
+                <div class="w-full h-10 bg-gray-800 border border-gray-600 rounded-t flex justify-center items-center">
+                    <div class="w-3 h-3 rounded-full bg-success animate-pulse"></div>
+                </div>
+                <div class="w-3 h-full bg-gray-700 relative">
+                    <!-- Success particles -->
+                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                        <div class="w-2 h-2 bg-success rounded-full animate-ping"></div>
+                    </div>
+                </div>
+                <div class="absolute top-full mt-2 text-xs font-mono text-success bg-black px-3 py-1 border border-success/30 rounded whitespace-nowrap">
+                    RELEASED
+                </div>
+                <!-- Deploy Log -->
+                <div class="absolute -right-20 top-16 w-40 glass-panel p-2 rounded text-[9px] font-mono text-gray-400 leading-tight">
+                    <div class="text-success">→ k8s apply</div>
+                    <div class="text-gray-500">→ Pods: 3/3 ready</div>
+                    <div class="text-success">✓ LIVE on prod</div>
+                </div>
+            </div>
+
+            <!-- Animated Items Container -->
+            <div id="pipeline-container" class="absolute inset-0 pointer-events-none z-30"></div>
+        </div>
+
+        <!-- Tech Stack Legend -->
+        <div class="max-w-7xl mx-auto px-6 mt-8">
+            <div class="glass-panel rounded-xl p-6">
+                <div class="text-center text-xs font-mono text-gray-500 mb-4">SUPPORTED TECH STACKS</div>
+                <div class="flex flex-wrap justify-center gap-4">
+                    <div class="flex items-center gap-2 px-4 py-2 rounded-lg bg-white/5 border border-white/10">
+                        <div class="w-6 h-6 rounded bg-[#6cc24a]/20 flex items-center justify-center text-[#6cc24a] text-xs">N</div>
+                        <span class="text-sm text-gray-300">Node.js</span>
+                    </div>
+                    <div class="flex items-center gap-2 px-4 py-2 rounded-lg bg-white/5 border border-white/10">
+                        <div class="w-6 h-6 rounded bg-[#f89820]/20 flex items-center justify-center text-[#f89820] text-xs">J</div>
+                        <span class="text-sm text-gray-300">Java</span>
+                    </div>
+                    <div class="flex items-center gap-2 px-4 py-2 rounded-lg bg-white/5 border border-white/10">
+                        <div class="w-6 h-6 rounded bg-[#00add8]/20 flex items-center justify-center text-[#00add8] text-xs">R</div>
+                        <span class="text-sm text-gray-300">React Native</span>
+                    </div>
+                    <div class="flex items-center gap-2 px-4 py-2 rounded-lg bg-white/5 border border-white/10">
+                        <div class="w-6 h-6 rounded bg-[#3ddc84]/20 flex items-center justify-center text-[#3ddc84] text-xs">A</div>
+                        <span class="text-sm text-gray-300">Android</span>
+                    </div>
+                    <div class="flex items-center gap-2 px-4 py-2 rounded-lg bg-white/5 border border-white/10">
+                        <div class="w-6 h-6 rounded bg-[#dea584]/20 flex items-center justify-center text-[#dea584] text-xs">🦀</div>
+                        <span class="text-sm text-gray-300">Rust</span>
+                    </div>
+                    <div class="flex items-center gap-2 px-4 py-2 rounded-lg bg-white/5 border border-white/10">
+                        <div class="w-6 h-6 rounded bg-[#F05138]/20 flex items-center justify-center text-[#F05138] text-xs">S</div>
+                        <span class="text-sm text-gray-300">Swift</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Interactive Controls -->
+        <div class="max-w-6xl mx-auto px-6 mt-8 flex justify-center gap-4">
+            <button id="pauseBtn" class="px-6 py-3 glass-panel rounded-lg border border-white/10 text-white hover:border-cyan/50 transition-all font-mono text-sm">
+                ⏸ Pause
+            </button>
+            <button id="speedBtn" class="px-6 py-3 glass-panel rounded-lg border border-white/10 text-white hover:border-highlight/50 transition-all font-mono text-sm">
+                ⚡ Speed x2
+            </button>
+            <button id="resetBtn" class="px-6 py-3 glass-panel rounded-lg border border-white/10 text-white hover:border-success/50 transition-all font-mono text-sm">
+                🔄 Reset
+            </button>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="py-24 px-6 bg-surface scroll-reveal">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-white mb-4">Frequently Asked Questions</h2>
+                <p class="text-gray-400">Everything you need to know about Buildline</p>
+            </div>
+
+            <div class="space-y-4">
+                <div class="glass-panel rounded-xl border border-white/10 overflow-hidden faq-item">
+                    <div class="p-6 cursor-pointer flex justify-between items-center hover:bg-white/5 transition-colors" onclick="toggleFAQ(this)">
+                        <h3 class="text-lg font-semibold text-white">How does Buildline differ from GitHub Actions or CircleCI?</h3>
+                        <svg class="w-5 h-5 text-gray-400 transform transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </div>
+                    <div class="faq-content max-h-0 overflow-hidden transition-all duration-300">
+                        <div class="p-6 pt-0 text-gray-400">
+                            Buildline lets you bring your own compute. Instead of renting expensive cloud runners, you connect your own infrastructure—cloud, on-prem, or hybrid. This means lower costs, better performance, and complete control over your data.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-panel rounded-xl border border-white/10 overflow-hidden faq-item">
+                    <div class="p-6 cursor-pointer flex justify-between items-center hover:bg-white/5 transition-colors" onclick="toggleFAQ(this)">
+                        <h3 class="text-lg font-semibold text-white">Can I use Buildline with my existing cloud infrastructure?</h3>
+                        <svg class="w-5 h-5 text-gray-400 transform transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </div>
+                    <div class="faq-content max-h-0 overflow-hidden transition-all duration-300">
+                        <div class="p-6 pt-0 text-gray-400">
+                            Absolutely! Buildline works seamlessly with AWS, GCP, Azure, and any Kubernetes cluster. You can also mix cloud and on-premises infrastructure in the same pipeline.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-panel rounded-xl border border-white/10 overflow-hidden faq-item">
+                    <div class="p-6 cursor-pointer flex justify-between items-center hover:bg-white/5 transition-colors" onclick="toggleFAQ(this)">
+                        <h3 class="text-lg font-semibold text-white">Is Buildline secure for enterprise use?</h3>
+                        <svg class="w-5 h-5 text-gray-400 transform transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </div>
+                    <div class="faq-content max-h-0 overflow-hidden transition-all duration-300">
+                        <div class="p-6 pt-0 text-gray-400">
+                            Yes! Your code never leaves your infrastructure. Agents connect outbound via WebSocket with no inbound ports required. All execution happens in your VPC or on-premises environment.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-panel rounded-xl border border-white/10 overflow-hidden faq-item">
+                    <div class="p-6 cursor-pointer flex justify-between items-center hover:bg-white/5 transition-colors" onclick="toggleFAQ(this)">
+                        <h3 class="text-lg font-semibold text-white">When will Buildline be available?</h3>
+                        <svg class="w-5 h-5 text-gray-400 transform transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </div>
+                    <div class="faq-content max-h-0 overflow-hidden transition-all duration-300">
+                        <div class="p-6 pt-0 text-gray-400">
+                            We're currently in validation phase. Join the wishlist to be among the first to know when we launch the MVP and get early access.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Wishlist CTA Section -->
+    <section id="wishlist" class="py-24 px-6 relative overflow-hidden text-center scroll-reveal">
+        <div class="absolute inset-0 bg-gradient-to-t from-highlight/10 to-transparent pointer-events-none"></div>
+        <div class="max-w-3xl mx-auto relative z-10">
+            <h2 class="text-4xl md:text-5xl font-bold text-white mb-6">Ready to claim your infra?</h2>
+            <p class="text-xl text-gray-400 mb-10">We are not selling a finished product yet. We are asking: Is this the CI/CD platform you wish existed?</p>
+            
+            <form class="max-w-md mx-auto flex gap-2 mb-8" id="wishlistForm">
+                <input type="email" placeholder="work@email.com" class="flex-1 bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-highlight transition-colors" required id="emailInput" />
+                <button type="submit" class="shimmer-button text-white px-6 py-3 rounded-lg font-bold hover:scale-105 transition-transform">
+                    Join Wishlist
+                </button>
+            </form>
+            
+            <div id="successMessage" class="hidden mb-6 p-4 bg-success/20 border border-success/50 rounded-lg text-success font-mono text-sm">
+                ✓ You're on the list! We'll be in touch soon.
+            </div>
+            
+            <p class="mt-6 text-xs text-gray-600">No spam. Just builders helping builders.</p>
+            
+            <!-- Social Proof -->
+            <div class="mt-12 flex justify-center items-center gap-8 text-sm text-gray-500">
+                <div class="flex items-center gap-2">
+                    <div class="w-2 h-2 bg-success rounded-full animate-pulse"></div>
+                    <span><span class="text-white font-semibold" id="wishlistCount">247</span> teams interested</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <svg class="w-4 h-4 text-highlight" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                    </svg>
+                    <span>Backed by builders</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t border-white/5 py-12 bg-surface">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="flex items-center gap-2">
+                <div class="w-6 h-6 rounded-lg bg-white/10 flex items-center justify-center text-xs font-bold">B</div>
+                <span class="text-sm font-semibold text-gray-300">Buildline Systems Inc.</span>
+            </div>
+            <div class="flex gap-8 text-sm text-gray-500">
+                <a href="#" class="hover:text-white transition-colors">Terms</a>
+                <a href="#" class="hover:text-white transition-colors">Privacy</a>
+                <a href="#" class="hover:text-white transition-colors">GitHub</a>
+                <a href="#" class="hover:text-white transition-colors">Twitter</a>
+            </div>
+            <div class="text-sm text-gray-600">
+                &copy; 2026 Buildline. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // --- 1. PARTICLE NETWORK CANVAS ---
+        const canvas = document.getElementById('network-canvas');
+        const ctx = canvas.getContext('2d');
+        let width, height;
+        let particles = [];
+
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.vx = (Math.random() - 0.5) * 0.5;
+                this.vy = (Math.random() - 0.5) * 0.5;
+                this.size = Math.random() * 2;
+            }
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                if (this.x < 0) this.x = width;
+                if (this.x > width) this.x = 0;
+                if (this.y < 0) this.y = height;
+                if (this.y > height) this.y = 0;
+            }
+            draw() {
+                ctx.fillStyle = 'rgba(255,255,255,0.3)';
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            particles = [];
+            for (let i = 0; i < 40; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+            particles.forEach((p, index) => {
+                p.update();
+                p.draw();
+                for (let j = index + 1; j < particles.length; j++) {
+                    const p2 = particles[j];
+                    const dx = p.x - p2.x;
+                    const dy = p.y - p2.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < 150) {
+                        ctx.strokeStyle = `rgba(255,255,255,${0.1 - dist/1500})`;
+                        ctx.lineWidth = 1;
+                        ctx.beginPath();
+                        ctx.moveTo(p.x, p.y);
+                        ctx.lineTo(p2.x, p2.y);
+                        ctx.stroke();
+                    }
+                }
+            });
+            requestAnimationFrame(animate);
+        }
+
+        window.addEventListener('resize', resize);
+        resize();
+        initParticles();
+        animate();
+
+        // --- 2. 3D CARD TILT ---
+        document.addEventListener('mousemove', (e) => {
+            const cards = document.querySelectorAll('.card-3d');
+            const x = (window.innerWidth / 2 - e.pageX) / 30;
+            const y = (window.innerHeight / 2 - e.pageY) / 30;
+            cards.forEach(card => {
+                const depth = card.getAttribute('data-depth') || 10;
+                card.style.transform = `translate(${x/depth}px, ${y/depth}px)`;
+            });
+        });
+
+        // --- 3. PIPELINE ANIMATION ---
+        const pipelineContainer = document.getElementById('pipeline-container');
+        let isPaused = false;
+        let animationSpeed = 4000; // 4 seconds between items
+        let animationInterval;
+        
+        const techStacks = [
+            { name: 'Node.js', color: '#6cc24a', icon: '<svg viewBox="0 0 24 24" fill="currentColor" width="30" height="30"><path d="M12 2L2 7l10 5 10-5-10-5zm0 9l2-1-2-1-2 1 2 1zm0 2l-10-5v10l10 5 10-5V8l-10 5z"/></svg>' },
+            { name: 'Rust', color: '#dea584', icon: '<svg viewBox="0 0 24 24" fill="currentColor" width="30" height="30"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none"/><path d="M12 6v12M6 12h12"/></svg>' },
+            { name: 'Java', color: '#f89820', icon: '<svg viewBox="0 0 24 24" fill="currentColor" width="30" height="30"><path d="M4 19h16v2H4zM20 6h-3V4H7v2H4v10h3v2h10v-2h3V6z"/></svg>' },
+            { name: 'React', color: '#00add8', icon: '<svg viewBox="0 0 24 24" fill="currentColor" width="30" height="30"><path d="M12 2c5.52 0 10 4.48 10 10s-4.48 10-10 10S2 17.52 2 12 6.48 2 12 2zm0 2c-4.42 0-8 3.58-8 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8z"/><circle cx="12" cy="12" r="2"/></svg>' },
+            { name: 'Android', color: '#3ddc84', icon: '<svg viewBox="0 0 24 24" fill="currentColor" width="30" height="30"><path d="M6 18c0 .55.45 1 1 1h10c.55 0 1-.45 1-1V7H6v11zm3.5-9.5l1.35-2.34c.1-.18-.04-.42-.26-.42-.08 0-.15.03-.19.1l-1.4 2.42c-2.36.42-4.15 2.49-4.15 5.04h14.3c0-2.55-1.79-4.62-4.15-5.04l-1.4-2.42c-.04-.07-.11-.1-.19-.1-.22 0-.36.24-.26.42l1.35 2.34c-.87-.2-1.78-.3-2.7-.3s-1.83.1-2.7.3z"/></svg>' },
+            { name: 'Swift', color: '#F05138', icon: '<svg viewBox="0 0 24 24" fill="currentColor" width="30" height="30"><path d="M19.14 7.5A9.86 9.86 0 0 1 17.5 12a10 10 0 0 1-8 6 9.9 9.9 0 0 1-5.5-1.5c3.5 0 6.5-2 8-5 0 0-1.5 1-3.5 1 0-4 4.5-6.5 4.5-6.5C12 7 11 9 11 9c2-2 4.5-2.5 8.14-1.5z"/></svg>' },
+            { name: 'AI Agent', color: '#a855f7', icon: '<svg viewBox="0 0 24 24" fill="currentColor" width="30" height="30"><path d="M12 2a2 2 0 012 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 017 7h1a1 1 0 011 1v3a1 1 0 01-1 1h-1v1a2 2 0 01-2 2H5a2 2 0 01-2-2v-1H2a1 1 0 01-1-1v-3a1 1 0 011-1h1a7 7 0 017-7V5.73A2 2 0 0112 2zM5 14a5 5 0 0010 0H5zm5-5a1 1 0 100 2 1 1 0 000-2zm4 0a1 1 0 100 2 1 1 0 000-2z"/></svg>' },
+        ];
+
+        function createPipelineItem() {
+            if (isPaused) return;
+            
+            const tech = techStacks[Math.floor(Math.random() * techStacks.length)];
+            
+            const wrapper = document.createElement('div');
+            wrapper.className = 'pipeline-item run-journey'; 
+            wrapper.style.animationDuration = `12s`; // Longer for 4 stages
+            
+            const sourceIcon = document.createElement('div');
+            sourceIcon.className = 'source-icon';
+            sourceIcon.style.color = tech.color;
+            sourceIcon.style.filter = `drop-shadow(0 0 5px ${tech.color})`;
+            sourceIcon.innerHTML = tech.icon;
+            
+            const box = document.createElement('div');
+            box.className = 'pipeline-box run-box-journey';
+            box.style.animationDuration = `12s`; // Match item duration
+            
+            const parachute = document.createElement('div');
+            parachute.innerHTML = '<svg class="w-16 h-16 text-white absolute -top-12 left-1/2 -translate-x-1/2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 15a9 9 0 0118 0M12 3v12m0 0l-3-3m3 3l3-3"/><path d="M5 15 L10 22 M19 15 L14 22" stroke="white" stroke-width="1"/></svg>';
+            
+            box.innerHTML = '<svg class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>';
+            box.appendChild(parachute);
+
+            wrapper.appendChild(sourceIcon);
+            pipelineContainer.appendChild(wrapper);
+            pipelineContainer.appendChild(box);
+
+            setTimeout(() => {
+                wrapper.remove();
+                box.remove();
+            }, 12000); // 12 seconds
+        }
+
+        function startAnimation() {
+            createPipelineItem();
+            setTimeout(createPipelineItem, animationSpeed / 2);
+            animationInterval = setInterval(createPipelineItem, animationSpeed);
+        }
+
+        startAnimation();
+
+        // Pause/Resume
+        document.getElementById('pauseBtn').addEventListener('click', function() {
+            isPaused = !isPaused;
+            this.innerHTML = isPaused ? '▶ Resume' : '⏸ Pause';
+            if (!isPaused) {
+                startAnimation();
+            } else {
+                clearInterval(animationInterval);
+            }
+        });
+
+        // Speed Control
+        let speedMultiplier = 1;
+        document.getElementById('speedBtn').addEventListener('click', function() {
+            speedMultiplier = speedMultiplier === 1 ? 2 : 1;
+            animationSpeed = speedMultiplier === 1 ? 4000 : 2000;
+            this.innerHTML = speedMultiplier === 1 ? '⚡ Speed x2' : '🐢 Normal';
+            clearInterval(animationInterval);
+            if (!isPaused) {
+                animationInterval = setInterval(createPipelineItem, animationSpeed);
+            }
+        });
+
+        // Reset Button
+        document.getElementById('resetBtn').addEventListener('click', function() {
+            // Clear all existing items
+            pipelineContainer.innerHTML = '';
+            
+            // Reset animation settings
+            isPaused = false;
+            speedMultiplier = 1;
+            animationSpeed = 4000;
+            
+            // Update button states
+            document.getElementById('pauseBtn').innerHTML = '⏸ Pause';
+            document.getElementById('speedBtn').innerHTML = '⚡ Speed x2';
+            
+            // Restart animation
+            clearInterval(animationInterval);
+            startAnimation();
+        });
+
+        // --- 4. SCROLL REVEAL ---
+        const scrollRevealElements = document.querySelectorAll('.scroll-reveal');
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('revealed');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        scrollRevealElements.forEach(el => revealObserver.observe(el));
+
+        // --- 5. STATS COUNTER ---
+        function animateCounter(element, target) {
+            const duration = 2000;
+            const start = 0;
+            const increment = target / (duration / 16);
+            let current = start;
+
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    element.textContent = target;
+                    clearInterval(timer);
+                } else {
+                    element.textContent = Math.floor(current);
+                }
+            }, 16);
+        }
+
+        const statCounters = document.querySelectorAll('.stat-counter');
+        const statsObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const target = parseInt(entry.target.dataset.target);
+                    animateCounter(entry.target, target);
+                    statsObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        statCounters.forEach(counter => {
+            statsObserver.observe(counter);
+        });
+
+        // --- 6. FAQ TOGGLE ---
+        function toggleFAQ(element) {
+            const content = element.nextElementSibling;
+            const icon = element.querySelector('svg');
+            const isOpen = content.style.maxHeight && content.style.maxHeight !== '0px';
+
+            if (isOpen) {
+                content.style.maxHeight = '0px';
+                icon.style.transform = 'rotate(0deg)';
+            } else {
+                content.style.maxHeight = content.scrollHeight + 'px';
+                icon.style.transform = 'rotate(180deg)';
+            }
+        }
+
+        // --- 7. WISHLIST FORM ---
+        document.getElementById('wishlistForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('emailInput').value;
+            const successMsg = document.getElementById('successMessage');
+            const wishlistCount = document.getElementById('wishlistCount');
+            
+            successMsg.classList.remove('hidden');
+            this.classList.add('hidden');
+            
+            const currentCount = parseInt(wishlistCount.textContent);
+            wishlistCount.textContent = currentCount + 1;
+        });
+
+        // --- 8. NAVBAR SCROLL EFFECT ---
+        let lastScroll = 0;
+        const navbar = document.getElementById('navbar');
+        
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            
+            if (currentScroll > 100) {
+                navbar.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.5)';
+            } else {
+                navbar.style.boxShadow = 'none';
+            }
+            
+            lastScroll = currentScroll;
+        });
+
+        // --- 9. SMOOTH SCROLL ---
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
