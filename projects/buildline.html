@@ -400,6 +400,78 @@
             animation: blink 1s step-end infinite;
         }
 
+        /* Mobile Responsive Styles */
+        @media (max-width: 768px) {
+            /* Hero section adjustments */
+            h1 {
+                font-size: 2.5rem !important;
+                line-height: 1.1 !important;
+            }
+
+            /* Hide desktop-only hero elements on mobile */
+            .perspective-container.hidden.lg\:block {
+                display: none !important;
+            }
+
+            /* Feature cards stack on mobile */
+            .grid.grid-cols-1.md\:grid-cols-3 {
+                gap: 1rem !important;
+            }
+
+            /* FAQ section */
+            .faq-item h3 {
+                font-size: 0.95rem !important;
+            }
+
+            /* Stats counter */
+            .stat-counter {
+                font-size: 1.5rem !important;
+            }
+
+            /* Comparison table */
+            .grid.grid-cols-3 {
+                font-size: 0.75rem !important;
+            }
+
+            /* Buttons responsive */
+            .px-8.py-4 {
+                padding: 0.75rem 1.5rem !important;
+                font-size: 0.875rem !important;
+            }
+        }
+
+        @media (max-width: 640px) {
+            /* Extra small screens */
+            h1 {
+                font-size: 2rem !important;
+            }
+
+            h2 {
+                font-size: 1.5rem !important;
+            }
+
+            /* Hero stats grid */
+            .grid.grid-cols-3.gap-6 {
+                gap: 1rem !important;
+            }
+
+            /* Wishlist form */
+            #wishlistForm {
+                flex-direction: column !important;
+            }
+
+            #wishlistForm input,
+            #wishlistForm button {
+                width: 100% !important;
+            }
+
+            /* Footer */
+            footer .flex.gap-8 {
+                gap: 1rem !important;
+                font-size: 0.75rem !important;
+            }
+        }
+
         /* Mobile Phone Animation Phases */
         .mobile-phase-1 {
             opacity: 1;
@@ -465,6 +537,8 @@
                 </div>
                 <span class="font-bold text-lg tracking-tight text-white group-hover:text-highlight transition-colors">Buildline</span>
             </div>
+            
+            <!-- Desktop Menu -->
             <div class="hidden md:flex items-center gap-8 text-sm font-medium text-gray-400">
                 <a href="#why" class="hover:text-white transition-colors relative group">
                     Philosophy
@@ -487,9 +561,30 @@
                     <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-highlight group-hover:w-full transition-all duration-300"></span>
                 </a>
             </div>
-            <a href="#wishlist" class="px-5 py-2 rounded-full bg-white text-void font-semibold text-sm hover:bg-gray-200 transition-all transform hover:scale-105 shadow-lg">
-                Join Wishlist
-            </a>
+            
+            <div class="flex items-center gap-4">
+                <a href="#wishlist" class="px-5 py-2 rounded-full bg-white text-void font-semibold text-sm hover:bg-gray-200 transition-all transform hover:scale-105 shadow-lg">
+                    Join Wishlist
+                </a>
+                
+                <!-- Mobile Menu Button -->
+                <button id="mobileMenuBtn" class="md:hidden text-white p-2">
+                    <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobileMenu" class="hidden md:hidden bg-void/95 backdrop-blur-xl border-t border-white/5">
+            <div class="px-6 py-4 space-y-3">
+                <a href="#why" class="block text-gray-400 hover:text-white transition-colors py-2">Philosophy</a>
+                <a href="#features" class="block text-gray-400 hover:text-white transition-colors py-2">AI Features</a>
+                <a href="#mobile" class="block text-gray-400 hover:text-white transition-colors py-2">Mobile</a>
+                <a href="#pipeline" class="block text-gray-400 hover:text-white transition-colors py-2">Demo</a>
+                <a href="#faq" class="block text-gray-400 hover:text-white transition-colors py-2">FAQ</a>
+            </div>
         </div>
     </nav>
 
@@ -720,28 +815,28 @@
     <section id="mobile" class="py-32 relative scroll-reveal">
         <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
             <div class="order-2 md:order-1 relative flex justify-center perspective-container">
-                <div class="relative w-[320px] h-[640px] bg-black border-8 border-gray-800 rounded-[3.5rem] shadow-2xl overflow-hidden z-10 card-3d" data-depth="30">
+                <div class="relative w-[280px] sm:w-[320px] h-[560px] sm:h-[640px] bg-black border-[6px] sm:border-8 border-gray-800 rounded-[2.5rem] sm:rounded-[3.5rem] shadow-2xl overflow-hidden z-10 card-3d" data-depth="30">
                     <!-- Phone Notch -->
-                    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-7 bg-gray-800 rounded-b-xl z-30"></div>
+                    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-28 sm:w-32 h-6 sm:h-7 bg-gray-800 rounded-b-xl z-30"></div>
                     
                     <!-- Phone Screen Content -->
                     <div class="w-full h-full bg-[#0a1628] flex flex-col relative">
                         <!-- Phase 1: Swift Code Editor -->
-                        <div class="absolute inset-0 p-6 pt-12 flex flex-col justify-center mobile-phase-1">
-                            <div class="font-mono text-xs leading-relaxed">
-                                <div class="mb-4">
+                        <div class="absolute inset-0 p-4 sm:p-6 pt-10 sm:pt-12 flex flex-col justify-center mobile-phase-1">
+                            <div class="font-mono text-[10px] sm:text-xs leading-relaxed">
+                                <div class="mb-3 sm:mb-4">
                                     <span class="text-[#ff7ab2]">import</span> <span class="text-white">SwiftUI</span>
                                 </div>
                                 <div class="mb-2">
                                     <span class="text-[#ff7ab2]">struct</span> <span class="text-white">App</span><span class="text-gray-400">:</span> <span class="text-[#4fc3f7]">View</span> <span class="text-white">{</span>
                                 </div>
-                                <div class="ml-4 mb-2">
+                                <div class="ml-3 sm:ml-4 mb-2">
                                     <span class="text-[#4fc3f7]">var</span> <span class="text-white">body</span><span class="text-gray-400">:</span> <span class="text-[#4fc3f7]">some</span> <span class="text-[#4fc3f7]">View</span> <span class="text-white">{</span>
                                 </div>
-                                <div class="ml-8 mb-2">
+                                <div class="ml-6 sm:ml-8 mb-2">
                                     <span class="text-white">Text(</span><span class="text-[#fc6a5d]">"Building..."</span><span class="text-white">)</span>
                                 </div>
-                                <div class="ml-4 mb-2">
+                                <div class="ml-3 sm:ml-4 mb-2">
                                     <span class="text-white">}</span>
                                 </div>
                                 <div>
@@ -753,16 +848,16 @@
                         <!-- Phase 2: Compiling with Spinner -->
                         <div class="absolute inset-0 flex flex-col items-center justify-center mobile-phase-2">
                             <!-- Spinner Circle -->
-                            <div class="relative mb-8">
-                                <svg class="w-24 h-24 animate-spin" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                            <div class="relative mb-6 sm:mb-8">
+                                <svg class="w-20 sm:w-24 h-20 sm:h-24 animate-spin" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
                                     <circle cx="50" cy="50" r="45" fill="none" stroke="#1a2f4a" stroke-width="8"/>
                                     <circle cx="50" cy="50" r="45" fill="none" stroke="#06b6d4" stroke-width="8" stroke-linecap="round"
                                             stroke-dasharray="70 200" transform="rotate(-90 50 50)"/>
                                 </svg>
                             </div>
                             
-                            <div class="text-center">
-                                <div class="text-cyan font-mono text-base mb-2 font-semibold">Compiling Assets...</div>
+                            <div class="text-center px-4">
+                                <div class="text-cyan font-mono text-sm sm:text-base mb-2 font-semibold">Compiling Assets...</div>
                                 <div class="text-gray-500 font-mono text-xs">Agent: mac-mini-m2</div>
                             </div>
                         </div>
@@ -770,17 +865,17 @@
                         <!-- Phase 3: Build Success -->
                         <div class="absolute inset-0 flex flex-col items-center justify-center mobile-phase-3">
                             <!-- Success Icon with Gradient -->
-                            <div class="relative mb-8">
-                                <div class="w-28 h-28 rounded-[2rem] bg-gradient-to-br from-[#b794f6] to-[#f472b6] flex items-center justify-center shadow-[0_0_40px_rgba(183,148,246,0.5)]">
-                                    <svg class="w-14 h-14 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                            <div class="relative mb-6 sm:mb-8">
+                                <div class="w-24 sm:w-28 h-24 sm:h-28 rounded-[1.75rem] sm:rounded-[2rem] bg-gradient-to-br from-[#b794f6] to-[#f472b6] flex items-center justify-center shadow-[0_0_40px_rgba(183,148,246,0.5)]">
+                                    <svg class="w-12 sm:w-14 h-12 sm:h-14 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
                                     </svg>
                                 </div>
                             </div>
                             
-                            <div class="text-center">
-                                <h3 class="text-2xl font-bold text-white mb-2">Build Success</h3>
-                                <p class="text-gray-400 text-sm">Uploaded to App Store Connect</p>
+                            <div class="text-center px-4">
+                                <h3 class="text-xl sm:text-2xl font-bold text-white mb-2">Build Success</h3>
+                                <p class="text-gray-400 text-xs sm:text-sm">Uploaded to App Store Connect</p>
                             </div>
                         </div>
                     </div>
@@ -792,22 +887,22 @@
 
             <div class="order-1 md:order-2">
                 <div class="text-highlight font-mono mb-4 text-sm tracking-widest uppercase">Mobile Native</div>
-                <h2 class="text-4xl md:text-5xl font-bold mb-6">Mobile CI without <br/><span class="text-white italic">the hacks.</span></h2>
-                <p class="text-gray-400 text-lg mb-8">
+                <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold mb-6">Mobile CI without <br/><span class="text-white italic">the hacks.</span></h2>
+                <p class="text-gray-400 text-base sm:text-lg mb-8">
                     We treat mobile as first-class. Native iOS and Android pipelines running on real Mac agents and Android emulators.
                 </p>
                 <ul class="space-y-4">
                     <li class="flex items-center gap-3 p-3 rounded-lg hover:bg-white/5 transition-colors">
-                        <div class="w-6 h-6 rounded-full bg-highlight/20 flex items-center justify-center text-highlight">✓</div>
-                        <span class="text-white">Real Mac Agents (BYO)</span>
+                        <div class="w-6 h-6 rounded-full bg-highlight/20 flex items-center justify-center text-highlight shrink-0">✓</div>
+                        <span class="text-white text-sm sm:text-base">Real Mac Agents (BYO)</span>
                     </li>
                     <li class="flex items-center gap-3 p-3 rounded-lg hover:bg-white/5 transition-colors">
-                        <div class="w-6 h-6 rounded-full bg-highlight/20 flex items-center justify-center text-highlight">✓</div>
-                        <span class="text-white">Code Signing & Modern Tooling</span>
+                        <div class="w-6 h-6 rounded-full bg-highlight/20 flex items-center justify-center text-highlight shrink-0">✓</div>
+                        <span class="text-white text-sm sm:text-base">Code Signing & Modern Tooling</span>
                     </li>
                     <li class="flex items-center gap-3 p-3 rounded-lg hover:bg-white/5 transition-colors">
-                        <div class="w-6 h-6 rounded-full bg-highlight/20 flex items-center justify-center text-highlight">✓</div>
-                        <span class="text-white">Direct App Store Upload</span>
+                        <div class="w-6 h-6 rounded-full bg-highlight/20 flex items-center justify-center text-highlight shrink-0">✓</div>
+                        <span class="text-white text-sm sm:text-base">Direct App Store Upload</span>
                     </li>
                 </ul>
             </div>
@@ -822,105 +917,100 @@
                 LIVE SYSTEM DEMO
             </div>
             <h2 class="text-3xl font-bold text-white mb-2">The Universal Assembly Line</h2>
-            <p class="text-gray-500 mt-2">Watch code transform into production-ready artifacts in real-time</p>
+            <p class="text-gray-500 mt-2 text-sm sm:text-base">Watch code transform into production-ready artifacts in real-time</p>
         </div>
 
-        <div class="relative w-full max-w-7xl mx-auto h-[550px] bg-metal rounded-xl border border-white/10 overflow-hidden shadow-2xl">
+        <div class="relative w-full max-w-7xl mx-auto h-[400px] sm:h-[500px] lg:h-[550px] bg-metal rounded-xl border border-white/10 overflow-hidden shadow-2xl">
             <!-- Grid Background -->
             <div class="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px]"></div>
 
-            <!-- Stage Labels -->
-            <div class="absolute top-8 left-0 right-0 flex justify-around px-8 z-30">
-                <div class="text-center">
-                    <div class="w-12 h-12 mx-auto mb-2 rounded-lg bg-danger/20 border border-danger/50 flex items-center justify-center">
-                        <svg class="w-6 h-6 text-danger" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            <!-- Stage Labels - Mobile Optimized -->
+            <div class="absolute top-4 sm:top-8 left-0 right-0 px-2 sm:px-8 z-30">
+                <div class="flex flex-wrap justify-center gap-2 sm:gap-4 lg:justify-around">
+                    <div class="text-center flex-shrink-0">
+                        <div class="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 mx-auto mb-1 sm:mb-2 rounded-lg bg-danger/20 border border-danger/50 flex items-center justify-center">
+                            <svg class="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 text-danger" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                        </div>
+                        <div class="text-[10px] sm:text-xs font-mono text-danger font-bold">SCAN</div>
+                        <div class="hidden sm:block text-[8px] lg:text-[10px] text-gray-500">Security</div>
                     </div>
-                    <div class="text-xs font-mono text-danger font-bold">SCAN</div>
-                    <div class="text-[10px] text-gray-500">Security Check</div>
-                </div>
-                <div class="text-center">
-                    <div class="w-12 h-12 mx-auto mb-2 rounded-lg bg-highlight/20 border border-highlight/50 flex items-center justify-center animate-pulse">
-                        <svg class="w-6 h-6 text-highlight" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
+                    <div class="text-center flex-shrink-0">
+                        <div class="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 mx-auto mb-1 sm:mb-2 rounded-lg bg-highlight/20 border border-highlight/50 flex items-center justify-center animate-pulse">
+                            <svg class="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 text-highlight" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
+                        </div>
+                        <div class="text-[10px] sm:text-xs font-mono text-highlight font-bold">BUILD</div>
+                        <div class="hidden sm:block text-[8px] lg:text-[10px] text-gray-500">Compile</div>
                     </div>
-                    <div class="text-xs font-mono text-highlight font-bold">BUILD</div>
-                    <div class="text-[10px] text-gray-500">Compile + Test</div>
-                </div>
-                <div class="text-center">
-                    <div class="w-12 h-12 mx-auto mb-2 rounded-lg bg-cyan/20 border border-cyan/50 flex items-center justify-center">
-                        <svg class="w-6 h-6 text-cyan" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+                    <div class="text-center flex-shrink-0">
+                        <div class="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 mx-auto mb-1 sm:mb-2 rounded-lg bg-cyan/20 border border-cyan/50 flex items-center justify-center">
+                            <svg class="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 text-cyan" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+                        </div>
+                        <div class="text-[10px] sm:text-xs font-mono text-cyan font-bold">PACKAGE</div>
+                        <div class="hidden sm:block text-[8px] lg:text-[10px] text-gray-500">Container</div>
                     </div>
-                    <div class="text-xs font-mono text-cyan font-bold">PACKAGE</div>
-                    <div class="text-[10px] text-gray-500">Containerize</div>
-                </div>
-                <div class="text-center">
-                    <div class="w-12 h-12 mx-auto mb-2 rounded-lg bg-success/20 border border-success/50 flex items-center justify-center">
-                        <svg class="w-6 h-6 text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/></svg>
+                    <div class="text-center flex-shrink-0">
+                        <div class="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 mx-auto mb-1 sm:mb-2 rounded-lg bg-success/20 border border-success/50 flex items-center justify-center">
+                            <svg class="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/></svg>
+                        </div>
+                        <div class="text-[10px] sm:text-xs font-mono text-success font-bold">RELEASE</div>
+                        <div class="hidden sm:block text-[8px] lg:text-[10px] text-gray-500">Deploy</div>
                     </div>
-                    <div class="text-xs font-mono text-success font-bold">RELEASE</div>
-                    <div class="text-[10px] text-gray-500">Deploy Live</div>
                 </div>
             </div>
 
             <!-- Conveyor Belt System -->
-            <div class="absolute bottom-20 w-full">
-                <div class="w-full h-16 conveyor-belt relative z-10"></div>
-                <!-- Gears -->
-                <div class="absolute -bottom-10 left-[8%] w-24 h-24 border-4 border-gray-600 border-dashed rounded-full gear z-0"></div>
-                <div class="absolute -bottom-10 left-[28%] w-24 h-24 border-4 border-gray-600 border-dashed rounded-full gear z-0" style="animation-delay: 0.5s"></div>
-                <div class="absolute -bottom-10 left-[48%] w-24 h-24 border-4 border-gray-600 border-dashed rounded-full gear z-0" style="animation-delay: 1s"></div>
-                <div class="absolute -bottom-10 left-[68%] w-24 h-24 border-4 border-gray-600 border-dashed rounded-full gear z-0" style="animation-delay: 1.5s"></div>
-                <div class="absolute -bottom-10 left-[88%] w-24 h-24 border-4 border-gray-600 border-dashed rounded-full gear z-0" style="animation-delay: 2s"></div>
+            <div class="absolute bottom-16 sm:bottom-20 w-full">
+                <div class="w-full h-12 sm:h-16 conveyor-belt relative z-10"></div>
+                <!-- Gears - Responsive -->
+                <div class="absolute -bottom-8 sm:-bottom-10 left-[8%] w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 border-2 sm:border-4 border-gray-600 border-dashed rounded-full gear z-0"></div>
+                <div class="absolute -bottom-8 sm:-bottom-10 left-[28%] w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 border-2 sm:border-4 border-gray-600 border-dashed rounded-full gear z-0" style="animation-delay: 0.5s"></div>
+                <div class="absolute -bottom-8 sm:-bottom-10 left-[48%] w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 border-2 sm:border-4 border-gray-600 border-dashed rounded-full gear z-0" style="animation-delay: 1s"></div>
+                <div class="absolute -bottom-8 sm:-bottom-10 left-[68%] w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 border-2 sm:border-4 border-gray-600 border-dashed rounded-full gear z-0" style="animation-delay: 1.5s"></div>
+                <div class="absolute -bottom-8 sm:-bottom-10 right-[8%] w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 border-2 sm:border-4 border-gray-600 border-dashed rounded-full gear z-0" style="animation-delay: 2s"></div>
             </div>
 
-            <!-- Stage 1: Scanner -->
-            <div class="absolute bottom-20 left-[8%] w-40 h-72 z-20 flex flex-col items-center">
-                <div class="w-full h-10 bg-gray-800 border border-gray-600 rounded-t flex justify-center items-center relative">
-                    <div class="w-3 h-3 rounded-full bg-danger animate-pulse"></div>
+            <!-- Stage 1: Scanner - Hidden on mobile, shown on tablet+ -->
+            <div class="hidden md:flex absolute bottom-16 sm:bottom-20 left-[8%] w-32 lg:w-40 h-56 lg:h-72 z-20 flex-col items-center">
+                <div class="w-full h-8 lg:h-10 bg-gray-800 border border-gray-600 rounded-t flex justify-center items-center relative">
+                    <div class="w-2 lg:w-3 h-2 lg:h-3 rounded-full bg-danger animate-pulse"></div>
                 </div>
-                <div class="w-3 h-full bg-gray-700 relative">
-                    <!-- Scanning beam -->
-                    <div class="absolute top-10 left-1/2 -translate-x-1/2 w-32 h-full scanner-beam opacity-50 blur-md pointer-events-none"></div>
+                <div class="w-2 lg:w-3 h-full bg-gray-700 relative">
+                    <div class="absolute top-10 left-1/2 -translate-x-1/2 w-24 lg:w-32 h-full scanner-beam opacity-50 blur-md pointer-events-none"></div>
                 </div>
-                <div class="absolute top-full mt-2 text-xs font-mono text-danger bg-black px-3 py-1 border border-danger/30 rounded whitespace-nowrap">
+                <div class="absolute top-full mt-2 text-[10px] lg:text-xs font-mono text-danger bg-black px-2 lg:px-3 py-1 border border-danger/30 rounded whitespace-nowrap">
                     SCANNING...
                 </div>
-                <!-- Logs -->
-                <div class="absolute -right-24 top-16 w-48 glass-panel p-2 rounded text-[9px] font-mono text-gray-400 leading-tight">
-                    <div class="text-danger">→ npm audit</div>
-                    <div class="text-gray-500">→ 0 vulnerabilities</div>
-                    <div class="text-success">✓ Security: PASS</div>
-                </div>
             </div>
 
-            <!-- Stage 2: Build Engine (CENTER) -->
-            <div class="absolute bottom-20 left-1/2 -translate-x-1/2 w-56 h-96 z-20 flex flex-col items-center justify-end">
-                <div class="w-full h-80 bg-void/95 border-2 border-highlight/50 rounded-t-xl backdrop-blur-sm relative overflow-hidden flex flex-col shadow-[0_0_40px_rgba(139,92,246,0.2)]">
+            <!-- Stage 2: Build Engine (CENTER) - Always visible, responsive -->
+            <div class="absolute bottom-16 sm:bottom-20 left-1/2 -translate-x-1/2 w-48 sm:w-52 lg:w-56 h-72 sm:h-80 lg:h-96 z-20 flex flex-col items-center justify-end">
+                <div class="w-full h-64 sm:h-72 lg:h-80 bg-void/95 border border-highlight/50 lg:border-2 rounded-t-xl backdrop-blur-sm relative overflow-hidden flex flex-col shadow-[0_0_40px_rgba(139,92,246,0.2)]">
                     <!-- Header -->
-                    <div class="bg-highlight/20 border-b border-highlight/30 p-2 flex items-center justify-between">
-                        <div class="text-[10px] font-mono text-highlight font-bold">BUILD ENGINE</div>
+                    <div class="bg-highlight/20 border-b border-highlight/30 p-1.5 sm:p-2 flex items-center justify-between">
+                        <div class="text-[8px] sm:text-[10px] font-mono text-highlight font-bold">BUILD ENGINE</div>
                         <div class="flex gap-1">
-                            <div class="w-2 h-2 rounded-full bg-success animate-pulse"></div>
-                            <div class="w-2 h-2 rounded-full bg-cyan animate-pulse" style="animation-delay: 0.2s"></div>
-                            <div class="w-2 h-2 rounded-full bg-highlight animate-pulse" style="animation-delay: 0.4s"></div>
+                            <div class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-success animate-pulse"></div>
+                            <div class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-cyan animate-pulse" style="animation-delay: 0.2s"></div>
+                            <div class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-highlight animate-pulse" style="animation-delay: 0.4s"></div>
                         </div>
                     </div>
                     
                     <!-- Build Logs -->
-                    <div class="flex-1 p-3 font-mono text-[9px] leading-relaxed text-left overflow-hidden">
+                    <div class="flex-1 p-2 sm:p-3 font-mono text-[7px] sm:text-[9px] leading-relaxed text-left overflow-hidden">
                         <div class="text-gray-400 mb-1">$ buildline run</div>
                         <div class="text-cyan">→ Detected: Node.js 20.x</div>
                         <div class="text-gray-500">→ Installing dependencies...</div>
-                        <div class="text-success">✓ 847 packages installed (2.1s)</div>
-                        <div class="text-highlight mt-2">→ Running build...</div>
+                        <div class="text-success">✓ 847 packages (2.1s)</div>
+                        <div class="text-highlight mt-1 sm:mt-2">→ Running build...</div>
                         <div class="text-gray-500">  - Compiling TypeScript...</div>
                         <div class="text-gray-500">  - Bundling assets...</div>
                         <div class="text-success">✓ Build complete (8.3s)</div>
-                        <div class="text-cyan mt-2">→ Running tests...</div>
+                        <div class="text-cyan mt-1 sm:mt-2">→ Running tests...</div>
                         <div class="text-success">✓ 127 tests passed</div>
                     </div>
 
                     <!-- Activity Indicator -->
-                    <div class="absolute bottom-3 left-3 right-3 h-1 bg-gray-800 rounded overflow-hidden">
+                    <div class="absolute bottom-2 sm:bottom-3 left-2 sm:left-3 right-2 sm:right-3 h-0.5 sm:h-1 bg-gray-800 rounded overflow-hidden">
                         <div class="h-full bg-gradient-to-r from-highlight via-cyan to-success animate-[progressFlow_1.5s_linear_infinite] w-full"></div>
                     </div>
 
@@ -929,43 +1019,29 @@
                 </div>
             </div>
 
-            <!-- Stage 3: Packager -->
-            <div class="absolute bottom-20 right-[28%] w-40 h-72 z-20 flex flex-col items-center">
-                <div class="w-full h-10 bg-gray-800 border border-gray-600 rounded-t flex justify-center items-center">
-                    <div class="w-3 h-3 rounded-full bg-cyan animate-pulse"></div>
+            <!-- Stage 3: Packager - Hidden on mobile -->
+            <div class="hidden md:flex absolute bottom-16 sm:bottom-20 right-[28%] w-32 lg:w-40 h-56 lg:h-72 z-20 flex-col items-center">
+                <div class="w-full h-8 lg:h-10 bg-gray-800 border border-gray-600 rounded-t flex justify-center items-center">
+                    <div class="w-2 lg:w-3 h-2 lg:h-3 rounded-full bg-cyan animate-pulse"></div>
                 </div>
-                <div class="w-3 h-full bg-gray-700"></div>
-                <div class="absolute top-full mt-2 text-xs font-mono text-cyan bg-black px-3 py-1 border border-cyan/30 rounded whitespace-nowrap">
+                <div class="w-2 lg:w-3 h-full bg-gray-700"></div>
+                <div class="absolute top-full mt-2 text-[10px] lg:text-xs font-mono text-cyan bg-black px-2 lg:px-3 py-1 border border-cyan/30 rounded whitespace-nowrap">
                     PACKAGING
-                </div>
-                <!-- Docker Build -->
-                <div class="absolute -left-24 top-16 w-44 glass-panel p-2 rounded text-[9px] font-mono text-gray-400 leading-tight">
-                    <div class="text-cyan">→ docker build</div>
-                    <div class="text-gray-500">Step 1/8: FROM node:20</div>
-                    <div class="text-gray-500">Step 8/8: CMD ["start"]</div>
-                    <div class="text-success">✓ Image built: 247MB</div>
                 </div>
             </div>
 
-            <!-- Stage 4: Release -->
-            <div class="absolute bottom-20 right-[8%] w-40 h-72 z-20 flex flex-col items-center">
-                <div class="w-full h-10 bg-gray-800 border border-gray-600 rounded-t flex justify-center items-center">
-                    <div class="w-3 h-3 rounded-full bg-success animate-pulse"></div>
+            <!-- Stage 4: Release - Hidden on mobile -->
+            <div class="hidden md:flex absolute bottom-16 sm:bottom-20 right-[8%] w-32 lg:w-40 h-56 lg:h-72 z-20 flex-col items-center">
+                <div class="w-full h-8 lg:h-10 bg-gray-800 border border-gray-600 rounded-t flex justify-center items-center">
+                    <div class="w-2 lg:w-3 h-2 lg:h-3 rounded-full bg-success animate-pulse"></div>
                 </div>
-                <div class="w-3 h-full bg-gray-700 relative">
-                    <!-- Success particles -->
+                <div class="w-2 lg:w-3 h-full bg-gray-700 relative">
                     <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-                        <div class="w-2 h-2 bg-success rounded-full animate-ping"></div>
+                        <div class="w-1.5 lg:w-2 h-1.5 lg:h-2 bg-success rounded-full animate-ping"></div>
                     </div>
                 </div>
-                <div class="absolute top-full mt-2 text-xs font-mono text-success bg-black px-3 py-1 border border-success/30 rounded whitespace-nowrap">
+                <div class="absolute top-full mt-2 text-[10px] lg:text-xs font-mono text-success bg-black px-2 lg:px-3 py-1 border border-success/30 rounded whitespace-nowrap">
                     RELEASED
-                </div>
-                <!-- Deploy Log -->
-                <div class="absolute -right-20 top-16 w-40 glass-panel p-2 rounded text-[9px] font-mono text-gray-400 leading-tight">
-                    <div class="text-success">→ k8s apply</div>
-                    <div class="text-gray-500">→ Pods: 3/3 ready</div>
-                    <div class="text-success">✓ LIVE on prod</div>
                 </div>
             </div>
 
@@ -973,50 +1049,194 @@
             <div id="pipeline-container" class="absolute inset-0 pointer-events-none z-30"></div>
         </div>
 
-        <!-- Tech Stack Legend -->
-        <div class="max-w-7xl mx-auto px-6 mt-8">
-            <div class="glass-panel rounded-xl p-6">
-                <div class="text-center text-xs font-mono text-gray-500 mb-4">SUPPORTED TECH STACKS</div>
-                <div class="flex flex-wrap justify-center gap-4">
-                    <div class="flex items-center gap-2 px-4 py-2 rounded-lg bg-white/5 border border-white/10">
-                        <div class="w-6 h-6 rounded bg-[#6cc24a]/20 flex items-center justify-center text-[#6cc24a] text-xs">N</div>
-                        <span class="text-sm text-gray-300">Node.js</span>
+        <!-- Interactive Controls - Moved here directly under assembly line -->
+        <div class="max-w-7xl mx-auto px-6 mt-6 flex flex-wrap justify-center gap-2 sm:gap-4">
+            <button id="pauseBtn" class="px-4 sm:px-6 py-2 sm:py-3 glass-panel rounded-lg border border-white/10 text-white hover:border-cyan/50 transition-all font-mono text-xs sm:text-sm">
+                ⏸ Pause
+            </button>
+            <button id="speedBtn" class="px-4 sm:px-6 py-2 sm:py-3 glass-panel rounded-lg border border-white/10 text-white hover:border-highlight/50 transition-all font-mono text-xs sm:text-sm">
+                ⚡ Speed x2
+            </button>
+            <button id="resetBtn" class="px-4 sm:px-6 py-2 sm:py-3 glass-panel rounded-lg border border-white/10 text-white hover:border-success/50 transition-all font-mono text-xs sm:text-sm">
+                🔄 Reset
+            </button>
+        </div>
+
+        <!-- Universal Tech Stack Section - COMPLETELY REDESIGNED -->
+        <div class="max-w-7xl mx-auto px-6 mt-12 sm:mt-16">
+            <div class="glass-panel rounded-2xl p-6 sm:p-8 lg:p-10 relative overflow-hidden">
+                <!-- Background Pattern -->
+                <div class="absolute inset-0 opacity-5">
+                    <div class="absolute inset-0 bg-[linear-gradient(rgba(139,92,246,0.3)_1px,transparent_1px),linear-gradient(90deg,rgba(139,92,246,0.3)_1px,transparent_1px)] bg-[size:20px_20px]"></div>
+                </div>
+
+                <div class="relative z-10">
+                    <!-- Header -->
+                    <div class="text-center mb-8 sm:mb-12">
+                        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-highlight/30 bg-highlight/10 text-xs sm:text-sm font-mono text-highlight mb-4 animate-pulse">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M10 2a8 8 0 100 16 8 8 0 000-16zM9 9a1 1 0 012 0v4a1 1 0 11-2 0V9zm1-4a1 1 0 100 2 1 1 0 000-2z"/>
+                            </svg>
+                            UNIVERSAL COMPATIBILITY
+                        </div>
+                        <h3 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-3 sm:mb-4">
+                            We Support <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan via-highlight to-neon-pink">Literally Everything</span>
+                        </h3>
+                        <p class="text-gray-400 text-sm sm:text-base max-w-3xl mx-auto leading-relaxed">
+                            Any language. Any framework. Any ecosystem. If it runs code, <span class="text-white font-semibold">Buildline builds it, tests it, deploys it, and manages the entire pipeline.</span>
+                            <span class="block mt-2 text-cyan">AI-powered optimization included.</span>
+                        </p>
                     </div>
-                    <div class="flex items-center gap-2 px-4 py-2 rounded-lg bg-white/5 border border-white/10">
-                        <div class="w-6 h-6 rounded bg-[#f89820]/20 flex items-center justify-center text-[#f89820] text-xs">J</div>
-                        <span class="text-sm text-gray-300">Java</span>
+
+                    <!-- Tech Categories Grid -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8">
+                        <!-- Backend Languages -->
+                        <div class="bg-white/5 rounded-xl p-4 sm:p-5 border border-white/10 hover:border-highlight/50 transition-all group">
+                            <div class="flex items-center gap-3 mb-4">
+                                <div class="w-10 h-10 rounded-lg bg-cyan/20 flex items-center justify-center">
+                                    <svg class="w-5 h-5 text-cyan" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                    </svg>
+                                </div>
+                                <h4 class="text-white font-bold text-sm sm:text-base">Backend</h4>
+                            </div>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="px-3 py-1 bg-[#6cc24a]/10 text-[#6cc24a] text-xs rounded-full border border-[#6cc24a]/30">Node.js</span>
+                                <span class="px-3 py-1 bg-[#00add8]/10 text-[#00add8] text-xs rounded-full border border-[#00add8]/30">Go</span>
+                                <span class="px-3 py-1 bg-[#ffde57]/10 text-[#ffde57] text-xs rounded-full border border-[#ffde57]/30">Python</span>
+                                <span class="px-3 py-1 bg-[#f89820]/10 text-[#f89820] text-xs rounded-full border border-[#f89820]/30">Java</span>
+                                <span class="px-3 py-1 bg-[#dea584]/10 text-[#dea584] text-xs rounded-full border border-[#dea584]/30">Rust</span>
+                                <span class="px-3 py-1 bg-[#00599c]/10 text-[#00599c] text-xs rounded-full border border-[#00599c]/30">C++</span>
+                                <span class="px-3 py-1 bg-[#5e5086]/10 text-[#5e5086] text-xs rounded-full border border-[#5e5086]/30">PHP</span>
+                                <span class="px-3 py-1 bg-[#b07219]/10 text-[#b07219] text-xs rounded-full border border-[#b07219]/30">C#</span>
+                            </div>
+                        </div>
+
+                        <!-- Frontend Frameworks -->
+                        <div class="bg-white/5 rounded-xl p-4 sm:p-5 border border-white/10 hover:border-highlight/50 transition-all group">
+                            <div class="flex items-center gap-3 mb-4">
+                                <div class="w-10 h-10 rounded-lg bg-highlight/20 flex items-center justify-center">
+                                    <svg class="w-5 h-5 text-highlight" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"/>
+                                    </svg>
+                                </div>
+                                <h4 class="text-white font-bold text-sm sm:text-base">Frontend</h4>
+                            </div>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="px-3 py-1 bg-[#61dafb]/10 text-[#61dafb] text-xs rounded-full border border-[#61dafb]/30">React</span>
+                                <span class="px-3 py-1 bg-[#42b883]/10 text-[#42b883] text-xs rounded-full border border-[#42b883]/30">Vue</span>
+                                <span class="px-3 py-1 bg-[#dd0031]/10 text-[#dd0031] text-xs rounded-full border border-[#dd0031]/30">Angular</span>
+                                <span class="px-3 py-1 bg-[#06b6d4]/10 text-[#06b6d4] text-xs rounded-full border border-[#06b6d4]/30">Svelte</span>
+                                <span class="px-3 py-1 bg-white/10 text-white text-xs rounded-full border border-white/30">Next.js</span>
+                                <span class="px-3 py-1 bg-[#00dc82]/10 text-[#00dc82] text-xs rounded-full border border-[#00dc82]/30">Nuxt</span>
+                            </div>
+                        </div>
+
+                        <!-- Mobile -->
+                        <div class="bg-white/5 rounded-xl p-4 sm:p-5 border border-white/10 hover:border-highlight/50 transition-all group">
+                            <div class="flex items-center gap-3 mb-4">
+                                <div class="w-10 h-10 rounded-lg bg-neon-pink/20 flex items-center justify-center">
+                                    <svg class="w-5 h-5 text-neon-pink" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+                                    </svg>
+                                </div>
+                                <h4 class="text-white font-bold text-sm sm:text-base">Mobile</h4>
+                            </div>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="px-3 py-1 bg-[#F05138]/10 text-[#F05138] text-xs rounded-full border border-[#F05138]/30">Swift</span>
+                                <span class="px-3 py-1 bg-[#a4c639]/10 text-[#a4c639] text-xs rounded-full border border-[#a4c639]/30">Kotlin</span>
+                                <span class="px-3 py-1 bg-[#3ddc84]/10 text-[#3ddc84] text-xs rounded-full border border-[#3ddc84]/30">Android</span>
+                                <span class="px-3 py-1 bg-[#61dafb]/10 text-[#61dafb] text-xs rounded-full border border-[#61dafb]/30">React Native</span>
+                                <span class="px-3 py-1 bg-[#02569b]/10 text-[#02569b] text-xs rounded-full border border-[#02569b]/30">Flutter</span>
+                            </div>
+                        </div>
+
+                        <!-- Infrastructure & AI -->
+                        <div class="bg-white/5 rounded-xl p-4 sm:p-5 border border-white/10 hover:border-highlight/50 transition-all group">
+                            <div class="flex items-center gap-3 mb-4">
+                                <div class="w-10 h-10 rounded-lg bg-success/20 flex items-center justify-center">
+                                    <svg class="w-5 h-5 text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"/>
+                                    </svg>
+                                </div>
+                                <h4 class="text-white font-bold text-sm sm:text-base">DevOps & AI</h4>
+                            </div>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="px-3 py-1 bg-[#2496ed]/10 text-[#2496ed] text-xs rounded-full border border-[#2496ed]/30">Docker</span>
+                                <span class="px-3 py-1 bg-[#326ce5]/10 text-[#326ce5] text-xs rounded-full border border-[#326ce5]/30">Kubernetes</span>
+                                <span class="px-3 py-1 bg-[#623ce4]/10 text-[#623ce4] text-xs rounded-full border border-[#623ce4]/30">Terraform</span>
+                                <span class="px-3 py-1 bg-[#ff6f00]/10 text-[#ff6f00] text-xs rounded-full border border-[#ff6f00]/30">TensorFlow</span>
+                                <span class="px-3 py-1 bg-[#ee4c2c]/10 text-[#ee4c2c] text-xs rounded-full border border-[#ee4c2c]/30">PyTorch</span>
+                                <span class="px-3 py-1 bg-[#76b900]/10 text-[#76b900] text-xs rounded-full border border-[#76b900]/30">CUDA</span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="flex items-center gap-2 px-4 py-2 rounded-lg bg-white/5 border border-white/10">
-                        <div class="w-6 h-6 rounded bg-[#00add8]/20 flex items-center justify-center text-[#00add8] text-xs">R</div>
-                        <span class="text-sm text-gray-300">React Native</span>
+
+                    <!-- Additional AI & ML Row -->
+                    <div class="mb-8 bg-gradient-to-r from-highlight/5 via-cyan/5 to-success/5 rounded-xl p-4 sm:p-6 border border-highlight/20">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-highlight to-cyan flex items-center justify-center">
+                                <svg class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="text-white font-bold text-sm sm:text-base">AI & Machine Learning</h4>
+                                <p class="text-gray-500 text-xs">Train, build, and deploy ML models in your pipeline</p>
+                            </div>
+                        </div>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-3 py-1 bg-[#ff6f00]/10 text-[#ff6f00] text-xs rounded-full border border-[#ff6f00]/30">TensorFlow</span>
+                            <span class="px-3 py-1 bg-[#ee4c2c]/10 text-[#ee4c2c] text-xs rounded-full border border-[#ee4c2c]/30">PyTorch</span>
+                            <span class="px-3 py-1 bg-[#ff9900]/10 text-[#ff9900] text-xs rounded-full border border-[#ff9900]/30">Scikit-learn</span>
+                            <span class="px-3 py-1 bg-[#76b900]/10 text-[#76b900] text-xs rounded-full border border-[#76b900]/30">CUDA</span>
+                            <span class="px-3 py-1 bg-[#0db7ed]/10 text-[#0db7ed] text-xs rounded-full border border-[#0db7ed]/30">ONNX</span>
+                            <span class="px-3 py-1 bg-[#fbbc04]/10 text-[#fbbc04] text-xs rounded-full border border-[#fbbc04]/30">Keras</span>
+                            <span class="px-3 py-1 bg-[#00d4aa]/10 text-[#00d4aa] text-xs rounded-full border border-[#00d4aa]/30">Hugging Face</span>
+                            <span class="px-3 py-1 bg-[#412991]/10 text-[#412991] text-xs rounded-full border border-[#412991]/30">JAX</span>
+                            <span class="px-3 py-1 bg-[#013243]/10 text-[#76b900] text-xs rounded-full border border-[#76b900]/30">MLflow</span>
+                            <span class="px-3 py-1 bg-[#00aeff]/10 text-[#00aeff] text-xs rounded-full border border-[#00aeff]/30">OpenCV</span>
+                        </div>
                     </div>
-                    <div class="flex items-center gap-2 px-4 py-2 rounded-lg bg-white/5 border border-white/10">
-                        <div class="w-6 h-6 rounded bg-[#3ddc84]/20 flex items-center justify-center text-[#3ddc84] text-xs">A</div>
-                        <span class="text-sm text-gray-300">Android</span>
-                    </div>
-                    <div class="flex items-center gap-2 px-4 py-2 rounded-lg bg-white/5 border border-white/10">
-                        <div class="w-6 h-6 rounded bg-[#dea584]/20 flex items-center justify-center text-[#dea584] text-xs">🦀</div>
-                        <span class="text-sm text-gray-300">Rust</span>
-                    </div>
-                    <div class="flex items-center gap-2 px-4 py-2 rounded-lg bg-white/5 border border-white/10">
-                        <div class="w-6 h-6 rounded bg-[#F05138]/20 flex items-center justify-center text-[#F05138] text-xs">S</div>
-                        <span class="text-sm text-gray-300">Swift</span>
+
+                    <!-- Bottom CTA -->
+                    <div class="text-center pt-6 border-t border-white/10">
+                        <p class="text-gray-400 text-sm sm:text-base mb-4">
+                            Don't see your stack? <span class="text-white font-semibold">We support it anyway.</span>
+                        </p>
+                        <div class="flex flex-wrap justify-center gap-3 text-xs text-gray-500">
+                            <span class="flex items-center gap-1">
+                                <svg class="w-3 h-3 text-success" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                                Custom Build Scripts
+                            </span>
+                            <span class="flex items-center gap-1">
+                                <svg class="w-3 h-3 text-success" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                                Monorepos
+                            </span>
+                            <span class="flex items-center gap-1">
+                                <svg class="w-3 h-3 text-success" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                                Multi-language
+                            </span>
+                            <span class="flex items-center gap-1">
+                                <svg class="w-3 h-3 text-success" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                                Legacy Systems
+                            </span>
+                            <span class="flex items-center gap-1">
+                                <svg class="w-3 h-3 text-success" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                                Experimental Tech
+                            </span>
+                            <span class="flex items-center gap-1">
+                                <svg class="w-3 h-3 text-cyan" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                                AI Model Training
+                            </span>
+                            <span class="flex items-center gap-1">
+                                <svg class="w-3 h-3 text-cyan" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                                Auto Deployment
+                            </span>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-
-        <!-- Interactive Controls -->
-        <div class="max-w-6xl mx-auto px-6 mt-8 flex justify-center gap-4">
-            <button id="pauseBtn" class="px-6 py-3 glass-panel rounded-lg border border-white/10 text-white hover:border-cyan/50 transition-all font-mono text-sm">
-                ⏸ Pause
-            </button>
-            <button id="speedBtn" class="px-6 py-3 glass-panel rounded-lg border border-white/10 text-white hover:border-highlight/50 transition-all font-mono text-sm">
-                ⚡ Speed x2
-            </button>
-            <button id="resetBtn" class="px-6 py-3 glass-panel rounded-lg border border-white/10 text-white hover:border-success/50 transition-all font-mono text-sm">
-                🔄 Reset
-            </button>
         </div>
     </section>
 
@@ -1426,8 +1646,28 @@
                         behavior: 'smooth',
                         block: 'start'
                     });
+                    // Close mobile menu if open
+                    document.getElementById('mobileMenu').classList.add('hidden');
                 }
             });
+        });
+
+        // --- 10. MOBILE MENU TOGGLE ---
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        
+        mobileMenuBtn.addEventListener('click', function() {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const isClickInsideMenu = mobileMenu.contains(event.target);
+            const isClickOnButton = mobileMenuBtn.contains(event.target);
+            
+            if (!isClickInsideMenu && !isClickOnButton && !mobileMenu.classList.contains('hidden')) {
+                mobileMenu.classList.add('hidden');
+            }
         });
     </script>
 </body>
